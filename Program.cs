@@ -11,11 +11,22 @@ var carrinho = new List<Produto>()
     new Produto { Nome = "Manteiga", Preco = 3.45 },
 };
 
-for (int i=0; i < carrinho.Count; i++)
+void PercorrendoComFor()
 {
-    Console.WriteLine($"Produto: {carrinho[i].Nome}");
+    for (int i = 0; i < carrinho.Count; i++)
+    {
+        var produto = carrinho[i];
+        Console.WriteLine($"Produto: {produto.Nome}");
+    }
 }
 
+void PercorrendoComForEach()
+{
+    foreach (var produto in carrinho) //Melhor opção!
+    {
+        Console.WriteLine($"Produto: {produto.Nome}");
+    }
+}
 
 class Produto
 {
