@@ -1,9 +1,6 @@
 ﻿using System.Collections;
 
-var diasDaSemana = new string[] { "Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado" };
-
-//var carrinho = new ArrayList()
-//-> Problema: ArrayList é uma coleção não genérica, o que significa que ela pode conter objetos de qualquer tipo. Isso pode levar a problemas de segurança de tipo e desempenho, pois é necessário fazer castings para acessar os elementos corretamente. 
+DiasDaSemana diasDaSemana = new DiasDaSemana(); 
 
 var carrinho = new List<Produto>()
 {
@@ -11,6 +8,23 @@ var carrinho = new List<Produto>()
     new Produto { Nome = "Manteiga", Preco = 3.45 },
 };
 
+void percorrendoComEnumerator()
+{
+    var enumerator = diasDaSemana.GetEnumerator();
+    while (enumerator.MoveNext())
+    {
+        var dia = enumerator.Current;
+        Console.WriteLine(dia);
+    }
+}
+
+void PercorrendoDiasDaSemana()
+{
+    foreach (var dia in diasDaSemana) // Precisa implementar o IEnumerable<string> para funcionar
+    {
+        Console.WriteLine(dia);
+    }
+}
 void PercorrendoComFor()
 {
     for (int i = 0; i < carrinho.Count; i++)
@@ -33,3 +47,43 @@ class Produto
     public string Nome { get; set; }
     public double Preco { get; set; }
 }
+
+class DiasDaSemanaEnumerator : IEnumerator<string>
+{
+    private int position = -1;
+    private string[] dias = { "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado" };
+    public string Current => dias[position];
+
+    object IEnumerator.Current => Current;
+
+    public void Dispose()
+    {
+    }
+
+    public bool MoveNext()
+    {
+        position++;
+
+        return position < dias.Length;
+    }
+
+    public void Reset()
+    {
+        position = -1;
+    }
+}
+
+class DiasDaSemana : IEnumerable<string>
+{
+    
+    public IEnumerator<string> GetEnumerator()
+    {
+        return new DiasDaSemanaEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+}
+
