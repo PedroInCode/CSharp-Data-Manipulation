@@ -8,6 +8,8 @@ var carrinho = new List<Produto>()
     new Produto { Nome = "Manteiga", Preco = 3.45 },
 };
 
+percorrendoComEnumerator();
+
 void percorrendoComEnumerator()
 {
     var enumerator = diasDaSemana.GetEnumerator();
@@ -48,37 +50,18 @@ class Produto
     public double Preco { get; set; }
 }
 
-class DiasDaSemanaEnumerator : IEnumerator<string>
-{
-    private int position = -1;
-    private string[] dias = { "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado" };
-    public string Current => dias[position];
-
-    object IEnumerator.Current => Current;
-
-    public void Dispose()
-    {
-    }
-
-    public bool MoveNext()
-    {
-        position++;
-
-        return position < dias.Length;
-    }
-
-    public void Reset()
-    {
-        position = -1;
-    }
-}
-
 class DiasDaSemana : IEnumerable<string>
 {
     
     public IEnumerator<string> GetEnumerator()
     {
-        return new DiasDaSemanaEnumerator();
+        yield return "Domingo";
+        yield return "Segunda";
+        yield return "Terça";
+        yield return "Quarta";
+        yield return "Quinta";
+        yield return "Sexta";
+        yield return "Sábado";
     }
 
     IEnumerator IEnumerable.GetEnumerator()
