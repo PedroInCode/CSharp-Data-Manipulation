@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\.NET\\02-OperadoresEmColecoes\\02-OperadoresEmColecoes.csproj": {}
+    "C:\\.NET\\DataManipulation\\02-OperadoresEmColecoes\\02-OperadoresEmColecoes.csproj": {}
   },
   "projects": {
-    "C:\\.NET\\02-OperadoresEmColecoes\\02-OperadoresEmColecoes.csproj": {
+    "C:\\.NET\\DataManipulation\\02-OperadoresEmColecoes\\02-OperadoresEmColecoes.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\.NET\\02-OperadoresEmColecoes\\02-OperadoresEmColecoes.csproj",
+        "projectUniqueName": "C:\\.NET\\DataManipulation\\02-OperadoresEmColecoes\\02-OperadoresEmColecoes.csproj",
         "projectName": "02-OperadoresEmColecoes",
-        "projectPath": "C:\\.NET\\02-OperadoresEmColecoes\\02-OperadoresEmColecoes.csproj",
+        "projectPath": "C:\\.NET\\DataManipulation\\02-OperadoresEmColecoes\\02-OperadoresEmColecoes.csproj",
         "packagesPath": "C:\\Users\\pedro\\.nuget\\packages\\",
-        "outputPath": "C:\\.NET\\02-OperadoresEmColecoes\\obj\\",
+        "outputPath": "C:\\.NET\\DataManipulation\\02-OperadoresEmColecoes\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
