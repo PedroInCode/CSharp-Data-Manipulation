@@ -9,10 +9,10 @@ quanto aleatório.
 
 Funcoes que vamos implementar:
 // [x] Criar as classes para musicas e playlist
-// [ ] Listar musicas da playlist
-// [ ] Adicionar musica à playlist
+// [x] Listar musicas da playlist
+// [x] Adicionar musica à playlist
 // [ ] Obter uma musica especifica da playlist
-// [ ] Remover musica da playlist
+// [x] Remover musica da playlist
 // [ ] Tocar uma musica aleatoria da playlist
 // [ ] Reordenar musicas segundo alguma logica especifica (ex. duracao)
 // [ ] Uma playlist nao pode ter musicas repetidas
@@ -22,6 +22,7 @@ Funcoes que vamos implementar:
 // [ ] - Historico de reproducao */
 
 using System.Collections;
+using System.Reflection.Metadata.Ecma335;
 
 var musica1 = new Musica { Titulo = "Qua Pais É Esse", Artista = "Legião Urbana", Duracao = 350 };
 var musica2 = new Musica { Titulo = "Tempo Perdido", Artista = "Legião Urbana", Duracao = 455 };
@@ -30,11 +31,11 @@ var musica4 = new Musica { Titulo = "Eduardo e Mônica", Artista = "Legião Urba
 var musica5 = new Musica { Titulo = "Geração Coca-Cola", Artista = "Legião Urbana", Duracao = 350 };
 
 var rockNacional = new Playlist { Nome = "Rock Nacional" };
-rockNacional.AdicionarMusica(musica1);
-rockNacional.AdicionarMusica(musica2);
-rockNacional.AdicionarMusica(musica3);
-rockNacional.AdicionarMusica(musica4);
-rockNacional.AdicionarMusica(musica5);
+rockNacional.Add(musica1);
+rockNacional.Add(musica2);
+rockNacional.Add(musica3);
+rockNacional.Add(musica4);
+rockNacional.Add(musica5);
 
 ExibirPlaylist(rockNacional);
 
@@ -53,20 +54,44 @@ class Musica
     public string Artista { get; set; }
     public int Duracao { get; set; }
 }
-class Playlist : IEnumerable<Musica> // Implementando IEnumerable para permitir iteração sobre as músicas da playlist
+class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir iteração sobre as músicas da playlist
 {
     private List<Musica> lista = new List<Musica>(); // lista interna para armazenar as músicas da playlist x
     public string Nome { get; set; }
 
-    public void AdicionarMusica(Musica musica) // Método para adicionar uma música à playlist
+    public int Count => lista.Count;
+
+    public bool IsReadOnly => false;
+
+    public void Add(Musica musica)
     {
         lista.Add(musica);
+    }
+
+    public void Clear()
+    {
+        lista.Clear();
+    }
+
+    public bool Contains(Musica musicaX)
+    {
+        return lista.Contains(musicaX);
+    }
+
+    public void CopyTo(Musica[] array, int arrayIndex)
+    {
+        lista.CopyTo(array, arrayIndex);
+    }
+    public bool Remove(Musica musica)
+    {
+        return lista.Remove(musica);
     }
 
     public IEnumerator<Musica> GetEnumerator() // Implementação do método GetEnumerator para permitir a iteração sobre as músicas da playlist
     {
         return lista.GetEnumerator();
     }
+
 
     IEnumerator IEnumerable.GetEnumerator() // Metodo antigo para compatibilidade com IEnumerable, delegando a chamada para o método genérico GetEnumerator
     {
