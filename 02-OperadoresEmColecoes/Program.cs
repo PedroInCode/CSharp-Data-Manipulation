@@ -39,50 +39,57 @@ rockNacional.Add(musica5);
 
 ExibirPlaylist(rockNacional);
 
-var musicaEncontrada = rockNacional.ObterPeloTitulo("Eduardo e Mônica");
-if (musicaEncontrada is not null)
-{
-    Console.WriteLine("\nRemovendo a música...");
-    rockNacional.Remove(musicaEncontrada);
-}
-else
-{
-    Console.WriteLine("Música não encontrada.");
-}
-
-ExibirPlaylist(rockNacional);
-
-var musicaAleatoria = rockNacional.ObterMusicaAleatoria();
-if (musicaAleatoria is not null)
-{
-    Console.WriteLine($"\nTocando música aleatória: {musicaAleatoria.Titulo}");
-}
-else
-{
-    Console.WriteLine("Playlist vazia...");
-}
 
     // _______________________________________________________________________________________________________________________________________
 
-    void ExibirPlaylist(Playlist playlist)
+void ExibirPlaylist(Playlist playlist)
+{
+    Console.WriteLine($"\n Tocando as músicas da playlist: {playlist.Nome}");
+    foreach (var musica in playlist)
     {
-        Console.WriteLine($"\n Tocando as músicas da playlist: {playlist.Nome}");
-        foreach (var musica in playlist)
-        {
-            Console.WriteLine($"\t - {musica.Titulo}");
-        }
+        Console.WriteLine($"\t - {musica.Titulo}");
     }
+}
+
+void RemoverMusicaPeloTitulo(Playlist playlist, string titulo)
+{
+    var musicaEncontrada = playlist.ObterPeloTitulo(titulo);
+    if (musicaEncontrada is not null)
+    {
+        Console.WriteLine("\nRemovendo a música...");
+        rockNacional.Remove(musicaEncontrada);
+    }
+    else
+    {
+        Console.WriteLine("Música não encontrada.");
+    }
+
+    ExibirPlaylist(rockNacional);
+}
+
+void ExibirMusicaAleatoria(Playlist playlist)
+{
+    var musicaAleatoria = rockNacional.ObterMusicaAleatoria();
+    if (musicaAleatoria is not null)
+    {
+        Console.WriteLine($"\nTocando música aleatória: {musicaAleatoria.Titulo}");
+    }
+    else
+    {
+        Console.WriteLine("Playlist vazia...");
+    }
+}
 
 class Musica
 {
-    public string Titulo { get; set; }
-    public string Artista { get; set; }
+    public string Titulo { get; set; } = string.Empty;
+    public string Artista { get; set; } = string.Empty;
     public int Duracao { get; set; }
 }
 class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir iteração sobre as músicas da playlist
 {
     private List<Musica> lista = new List<Musica>(); // lista interna para armazenar as músicas da playlist x
-    public string Nome { get; set; }
+    public string Nome { get; set; } = string.Empty;
 
     public int Count => lista.Count;
 
@@ -121,6 +128,11 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
         var random = new Random();
         int indiceAleatorio = random.Next(0, lista.Count );
         return lista[indiceAleatorio];
+    }
+
+    public void OrdenarPorDuracao()
+    {
+        lista.Sort(); // duração?
     }
 
     public void CopyTo(Musica[] array, int arrayIndex)
