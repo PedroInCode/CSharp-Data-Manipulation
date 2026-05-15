@@ -11,7 +11,7 @@ Funcoes que vamos implementar:
 // [x] Criar as classes para musicas e playlist
 // [x] Listar musicas da playlist
 // [x] Adicionar musica à playlist
-// [ ] Obter uma musica especifica da playlist
+// [x] Obter uma musica especifica da playlist
 // [x] Remover musica da playlist
 // [ ] Tocar uma musica aleatoria da playlist
 // [ ] Reordenar musicas segundo alguma logica especifica (ex. duracao)
@@ -39,14 +39,27 @@ rockNacional.Add(musica5);
 
 ExibirPlaylist(rockNacional);
 
-void ExibirPlaylist(Playlist playlist)
+var musicaEncontrada = rockNacional.ObterPeloTitulo("Eduardo e Mônica");
+if (musicaEncontrada is not null)
 {
-    Console.WriteLine($"\n Tocando as músicas da playlist: {playlist.Nome}");
-    foreach (var musica in playlist)
-    {
-        Console.WriteLine($"\t - {musica.Titulo}");
-    }
+    Console.WriteLine("\nRemovendo a música...");
+    rockNacional.Remove(musicaEncontrada);
 }
+else
+{
+    Console.WriteLine("Música não encontrada.");
+}
+
+ExibirPlaylist(rockNacional);
+
+void ExibirPlaylist(Playlist playlist)
+    {
+        Console.WriteLine($"\n Tocando as músicas da playlist: {playlist.Nome}");
+        foreach (var musica in playlist)
+        {
+            Console.WriteLine($"\t - {musica.Titulo}");
+        }
+    }
 
 class Musica
 {
@@ -76,6 +89,16 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
     public bool Contains(Musica musicaX)
     {
         return lista.Contains(musicaX);
+    }
+
+    public Musica? ObterPeloTitulo(string titulo)
+    {
+        foreach (var musica in lista)
+        {
+            if (musica.Titulo == titulo)
+                return musica;
+        }
+        return null;
     }
 
     public void CopyTo(Musica[] array, int arrayIndex)
