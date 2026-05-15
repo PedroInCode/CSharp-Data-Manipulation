@@ -14,7 +14,7 @@ Funcoes que vamos implementar:
 // [x] Obter uma musica especifica da playlist
 // [x] Remover musica da playlist
 // [x] Tocar uma musica aleatoria da playlist
-// [ ] Reordenar musicas segundo alguma logica especifica (ex. duracao)
+// [x] Reordenar musicas segundo alguma logica especifica (ex. duracao)
 // [ ] Uma playlist nao pode ter musicas repetidas
 // [ ] Exibir as 10 musicas mais tocadas em todas as playlists (ranking)
 // [ ] Player de musica com:
@@ -26,7 +26,7 @@ using System.Reflection.Metadata.Ecma335;
 
 var musica1 = new Musica { Titulo = "Qua Pais É Esse", Artista = "Legião Urbana", Duracao = 350 };
 var musica2 = new Musica { Titulo = "Tempo Perdido", Artista = "Legião Urbana", Duracao = 455 };
-var musica3 = new Musica { Titulo = "Pro dia nascer feliz", Artista = "Barão Vermelho", Duracao = 345 };
+var musica3 = new Musica { Titulo = "Pro dia nascer feliz", Artista = "Barão Vermelho", Duracao = 800 };
 var musica4 = new Musica { Titulo = "Eduardo e Mônica", Artista = "Legião Urbana", Duracao = 530 };
 var musica5 = new Musica { Titulo = "Geração Coca-Cola", Artista = "Legião Urbana", Duracao = 350 };
 
@@ -79,6 +79,28 @@ void ExibirMusicaAleatoria(Playlist playlist)
     else
     {
         Console.WriteLine("Playlist vazia...");
+    }
+}
+
+class CompararPorArtista : IComparer<Musica>
+{
+    public int Compare(Musica? x, Musica? y)
+    {
+        if (x is null || y is null) return 0;
+        if (x is null) return 1;
+        if (y is null) return -1;
+        return x.Artista.CompareTo(y.Artista);
+    }
+}
+
+class CompararPorTitulo : IComparer<Musica>
+{
+    public int Compare(Musica? x, Musica? y)
+    {
+        if (x is null || y is null) return 0;
+        if (x is null) return 1;
+        if (y is null) return -1;
+        return x.Titulo.CompareTo(y.Titulo);
     }
 }
 
@@ -141,7 +163,17 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
 
     public void OrdenarPorDuracao()
     {
-        lista.Sort();
+        lista.Sort(); // Ordena usando a implementação de CompareTo da classe Musica, que compara pela duração
+    }
+
+    public void OrdenarPorArtista()
+    {
+        lista.Sort(new CompararPorArtista()); // Ordena usando a classe CompararPorArtista, que implementa IComparer<Musica>
+    }
+
+    public void OrdenarPorTitulo()
+    {
+        lista.Sort(new CompararPorTitulo()); // Ordena usando a classe CompararPorTitulo, que implementa IComparer<Musica>
     }
 
     public void CopyTo(Musica[] array, int arrayIndex)
