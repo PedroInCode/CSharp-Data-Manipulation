@@ -37,17 +37,19 @@ rockNacional.Add(musica3);
 rockNacional.Add(musica4);
 rockNacional.Add(musica5);
 
+rockNacional.OrdenarPorDuracao();
+
 ExibirPlaylist(rockNacional);
 
 
-    // _______________________________________________________________________________________________________________________________________
+// _______________________________________________________________________________________________________________________________________
 
 void ExibirPlaylist(Playlist playlist)
 {
     Console.WriteLine($"\n Tocando as músicas da playlist: {playlist.Nome}");
     foreach (var musica in playlist)
     {
-        Console.WriteLine($"\t - {musica.Titulo}");
+        Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos");
     }
 }
 
@@ -80,11 +82,18 @@ void ExibirMusicaAleatoria(Playlist playlist)
     }
 }
 
-class Musica
+class Musica : IComparable
 {
     public string Titulo { get; set; } = string.Empty;
     public string Artista { get; set; } = string.Empty;
     public int Duracao { get; set; }
+
+    public int CompareTo(object? other) // iguais : 0, menor : -1, maior : 1
+    {
+        if (other is null) return -1;
+        if (other is Musica outraMusica) return this.Duracao.CompareTo(outraMusica.Duracao);
+        return -1;
+    }
 }
 class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir iteração sobre as músicas da playlist
 {
@@ -132,7 +141,7 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
 
     public void OrdenarPorDuracao()
     {
-        lista.Sort(); // duração?
+        lista.Sort();
     }
 
     public void CopyTo(Musica[] array, int arrayIndex)
