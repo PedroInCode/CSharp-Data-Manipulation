@@ -52,7 +52,19 @@ else
 
 ExibirPlaylist(rockNacional);
 
-void ExibirPlaylist(Playlist playlist)
+var musicaAleatoria = rockNacional.ObterMusicaAleatoria();
+if (musicaAleatoria is not null)
+{
+    Console.WriteLine($"\nTocando música aleatória: {musicaAleatoria.Titulo}");
+}
+else
+{
+    Console.WriteLine("Playlist vazia...");
+}
+
+    // _______________________________________________________________________________________________________________________________________
+
+    void ExibirPlaylist(Playlist playlist)
     {
         Console.WriteLine($"\n Tocando as músicas da playlist: {playlist.Nome}");
         foreach (var musica in playlist)
@@ -99,6 +111,16 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
                 return musica;
         }
         return null;
+    }
+
+    public Musica? ObterMusicaAleatoria()
+    {
+        if (lista.Count == 0)
+            return null;
+        
+        var random = new Random();
+        int indiceAleatorio = random.Next(0, lista.Count -1);
+        return lista[indiceAleatorio];
     }
 
     public void CopyTo(Musica[] array, int arrayIndex)
