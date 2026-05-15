@@ -26,7 +26,7 @@ internal class Playlist : ICollection<Musica>
         Console.WriteLine($"Tocando as músicas de {this.Nome}");
         foreach (var musica in this.playlist)
         {
-            Console.WriteLine($"\t - {musica.Titulo}");
+            Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos");
         }
     }
 
@@ -42,6 +42,19 @@ internal class Playlist : ICollection<Musica>
         return null; // Retorna null se a música não for encontrada
     }
 
+    public void RemoverMusicaPeloTitulo(string titulo)
+    {
+        var musica = ObterPeloTitulo(titulo); // Utiliza o método ObterPeloTitulo para encontrar a música
+        if (musica is not null)
+        {
+            playlist.Remove(musica); // Remove a música encontrada da playlist
+        }
+        else
+        {
+            Console.WriteLine($"Música com título '{titulo}' não encontrada na playlist."); // Mensagem de erro caso a música não seja encontrada
+        }
+    }
+
     public Musica? TocarMusicaAleatoria()
     {
         if (playlist.Count == 0)
@@ -52,6 +65,21 @@ internal class Playlist : ICollection<Musica>
         Random random = new Random();
         var indiceAleatorio = random.Next(0, playlist.Count); // Gera um índice aleatório dentro do intervalo da lista
         return playlist[indiceAleatorio]; // Retorna a música correspondente ao índice aleatório
+    }
+
+    public void OrdenarPorDuracao()
+    {
+        playlist.Sort(new OrdenarPorDuracao()); // Utiliza a classe OrdenarPorDuracao para ordenar a playlist por duração
+    }
+
+    public void OrdenarPorTitulo()
+    {
+        playlist.Sort(new OrdenarPorTitulo()); // Utiliza a classe OrdenarPorTitulo para ordenar a playlist por título
+    }
+
+    public void OrdenarPorArtista()
+    {
+        playlist.Sort(new OrdenarPorArtista()); // Utiliza a classe OrdenarPorArtista para ordenar a playlist por artista
     }
 
     // -=-=-=-=-=- Métodos do ICollection<Musica> -=-=-=-=-=-

@@ -26,7 +26,7 @@ using System.Reflection.Metadata.Ecma335;
 
 var musica1 = new Musica { Titulo = "Qua Pais É Esse", Artista = "Legião Urbana", Duracao = 350 };
 var musica2 = new Musica { Titulo = "Tempo Perdido", Artista = "Legião Urbana", Duracao = 455 };
-var musica3 = new Musica { Titulo = "Pro dia nascer feliz", Artista = "Barão Vermelho", Duracao = 800 };
+var musica3 = new Musica { Titulo = "Pro dia nascer feliz", Artista = "Barão Vermelho", Duracao = 345 };
 var musica4 = new Musica { Titulo = "Eduardo e Mônica", Artista = "Legião Urbana", Duracao = 530 };
 var musica5 = new Musica { Titulo = "Geração Coca-Cola", Artista = "Legião Urbana", Duracao = 350 };
 
@@ -86,7 +86,7 @@ class CompararPorArtista : IComparer<Musica>
 {
     public int Compare(Musica? x, Musica? y)
     {
-        if (x is null || y is null) return 0;
+        if (x is null && y is null) return 0;
         if (x is null) return 1;
         if (y is null) return -1;
         return x.Artista.CompareTo(y.Artista);
@@ -97,7 +97,7 @@ class CompararPorTitulo : IComparer<Musica>
 {
     public int Compare(Musica? x, Musica? y)
     {
-        if (x is null || y is null) return 0;
+        if (x is null && y is null) return 0;
         if (x is null) return 1;
         if (y is null) return -1;
         return x.Titulo.CompareTo(y.Titulo);

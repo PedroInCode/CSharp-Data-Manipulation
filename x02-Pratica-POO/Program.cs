@@ -34,9 +34,15 @@ Console.WriteLine($"------------------------------------------------------------
 var musicaAleatoria = playlist1.TocarMusicaAleatoria();
 if(musicaAleatoria is not null)
 {
-    Console.WriteLine($"Tocando a música aleatória: {musicaAleatoria.Titulo}");
+    Console.WriteLine($"Tocando a música aleatória: {musicaAleatoria.Titulo} ({musicaAleatoria.Artista}) - {musicaAleatoria.Duracao} segundos");
 }
 else 
 {
     Console.WriteLine("Música aleatória não encontrada, a playlist pode estar vazia..");
 }
+
+Console.WriteLine($"-------------------------------------------------------------------------------");
+
+Console.WriteLine($"Ordenando a playlist por duração:");
+playlist1.OrdenarPorDuracao();
+playlist1.ExibirPlaylist();
