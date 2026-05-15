@@ -19,15 +19,27 @@ internal class Playlist : ICollection<Musica>
         Nome = nome;
     }
 
-    // -=-=-=-=-=- Metodo para Exibir as músicas da playlist -=-=-=-=-=-
+    // -=-=-=-=-=- Metodos da playlist -=-=-=-=-=-
 
     public void ExibirPlaylist()
     {
         Console.WriteLine($"Tocando as músicas de {this.Nome}");
         foreach (var musica in this.playlist)
         {
-            Console.WriteLine($"\t - {musica.Nome}");
+            Console.WriteLine($"\t - {musica.Titulo}");
         }
+    }
+
+    public Musica? ObterPeloTitulo(string titulo)
+    {
+        foreach (var musica in playlist)
+        {
+            if (musica.Titulo == titulo)
+            {
+                return musica; // Retorna a música encontrada
+            }
+        }
+        return null; // Retorna null se a música não for encontrada
     }
 
     // -=-=-=-=-=- Métodos do ICollection<Musica> -=-=-=-=-=-

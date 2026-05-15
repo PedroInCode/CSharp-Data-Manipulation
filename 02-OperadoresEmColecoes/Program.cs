@@ -13,7 +13,7 @@ Funcoes que vamos implementar:
 // [x] Adicionar musica à playlist
 // [x] Obter uma musica especifica da playlist
 // [x] Remover musica da playlist
-// [ ] Tocar uma musica aleatoria da playlist
+// [x] Tocar uma musica aleatoria da playlist
 // [ ] Reordenar musicas segundo alguma logica especifica (ex. duracao)
 // [ ] Uma playlist nao pode ter musicas repetidas
 // [ ] Exibir as 10 musicas mais tocadas em todas as playlists (ranking)
@@ -119,7 +119,7 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
             return null;
         
         var random = new Random();
-        int indiceAleatorio = random.Next(0, lista.Count -1);
+        int indiceAleatorio = random.Next(0, lista.Count );
         return lista[indiceAleatorio];
     }
 

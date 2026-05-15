@@ -12,3 +12,19 @@ playlist1.Add(musica3);
 playlist1.Add(musica4);
 
 playlist1.ExibirPlaylist();
+
+Console.WriteLine($"-------------------------------------------------------------------------------");
+
+var musicaEncontrada = playlist1.ObterPeloTitulo("Alma de Pipa");
+if(musicaEncontrada is not null)
+{
+    Console.WriteLine($"Removendo a música {musicaEncontrada.Titulo} da playlist");
+    playlist1.Remove(musicaEncontrada);
+}
+else
+{
+    Console.WriteLine("Música não encontrada na playlist..");
+}
+
+Console.WriteLine($"Playlist atualizada:\n");
+playlist1.ExibirPlaylist();

@@ -8,13 +8,13 @@ namespace ColocandoNaPratica;
 
 internal class Musica
 {
-    public string Nome { get; set; }
+    public string Titulo { get; set; } = string.Empty;
     public string Artista { get; set; }
     public int Duracao { get; set; } // Duração em segundos
 
-    public Musica(string nome, string artista, int duracao)
+    public Musica(string titulo, string artista, int duracao)
     {
-        Nome = nome;
+        Titulo = titulo;
         Artista = artista;
         Duracao = duracao;
     }
