@@ -42,6 +42,18 @@ internal class Playlist : ICollection<Musica>
         return null; // Retorna null se a música não for encontrada
     }
 
+    public Musica? TocarMusicaAleatoria()
+    {
+        if (playlist.Count == 0)
+        {
+            return null; // Retorna null se a playlist estiver vazia
+        }
+
+        Random random = new Random();
+        var indiceAleatorio = random.Next(0, playlist.Count); // Gera um índice aleatório dentro do intervalo da lista
+        return playlist[indiceAleatorio]; // Retorna a música correspondente ao índice aleatório
+    }
+
     // -=-=-=-=-=- Métodos do ICollection<Musica> -=-=-=-=-=-
 
     public int Count => playlist.Count;

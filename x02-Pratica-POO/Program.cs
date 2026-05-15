@@ -28,3 +28,15 @@ else
 
 Console.WriteLine($"Playlist atualizada:\n");
 playlist1.ExibirPlaylist();
+
+Console.WriteLine($"-------------------------------------------------------------------------------");
+
+var musicaAleatoria = playlist1.TocarMusicaAleatoria();
+if(musicaAleatoria is not null)
+{
+    Console.WriteLine($"Tocando a música aleatória: {musicaAleatoria.Titulo}");
+}
+else 
+{
+    Console.WriteLine("Música aleatória não encontrada, a playlist pode estar vazia..");
+}
