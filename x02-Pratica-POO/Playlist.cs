@@ -10,6 +10,7 @@ namespace ColocandoNaPratica;
 
 internal class Playlist : ICollection<Musica>
 {
+    private HashSet<Musica> set = []; // Utiliza um HashSet para garantir que não haja músicas duplicadas na playlist
     private List<Musica> playlist = new List<Musica>();
     public string Nome { get; set; }
 
@@ -90,12 +91,21 @@ internal class Playlist : ICollection<Musica>
 
     public void Add(Musica musica)
     {
-        playlist.Add(musica);
+        if (set.Add(musica)) // Tenta adicionar a música ao HashSet para verificar se é uma música duplicada
+        {
+            playlist.Add(musica);
+        }
+        else
+        {
+            Console.WriteLine($"A música '{musica.Titulo}' já está na playlist. Não será adicionada novamente."); 
+            // Mensagem de aviso caso a música seja duplicada
+        }
     }
 
     public void Clear()
     {
-        playlist.Clear();
+        playlist.Clear(); 
+        set.Clear(); // Limpa também o HashSet para manter a consistência
     }
 
     public bool Contains(Musica musica)
@@ -109,6 +119,7 @@ internal class Playlist : ICollection<Musica>
     }
     public bool Remove(Musica musica)
     {
+        set.Remove(musica); // Remove a música do HashSet para manter a consistência
         return playlist.Remove(musica);
     }
 
