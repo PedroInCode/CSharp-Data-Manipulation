@@ -29,6 +29,12 @@ else
 Console.WriteLine($"Playlist atualizada:\n");
 playlist1.ExibirPlaylist();
 
+Console.WriteLine("--------------------------------------------------------------------------------");
+
+Console.WriteLine($"Removendo a música 'Por Mim' da playlist utilizando o método de remoção por título:");
+playlist1.RemoverMusicaPeloTitulo("Por Mim");
+playlist1.ExibirPlaylist();
+
 Console.WriteLine($"-------------------------------------------------------------------------------");
 
 var musicaAleatoria = playlist1.TocarMusicaAleatoria();

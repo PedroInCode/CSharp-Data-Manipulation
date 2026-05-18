@@ -24,12 +24,11 @@ Funcoes que vamos implementar:
 using System.Collections;
 using System.Reflection.Metadata.Ecma335;
 
-var musica1 = new Musica { Titulo = "Que Pais É Esse", Artista = "Legião Urbana", Duracao = 350 };
-var musica2 = new Musica { Titulo = "Tempo Perdido", Artista = "Legião Urbana", Duracao = 455 };
-var musica3 = new Musica { Titulo = "Pro dia nascer feliz", Artista = "Barão Vermelho", Duracao = 345 };
-var musica4 = new Musica { Titulo = "Eduardo e Mônica", Artista = "Legião Urbana", Duracao = 530 };
-var musica5 = new Musica { Titulo = "Geração Coca-Cola", Artista = "Legião Urbana", Duracao = 350 };
-
+var musica1 = new Musica("Que Pais É Esse", "Legião Urbana", 350 );
+var musica2 = new Musica("Tempo Perdido", "Legião Urbana", 455 );
+var musica3 = new Musica("Pro dia nascer feliz", "Barão Vermelho", 345 );
+var musica4 = new Musica("Eduardo e Mônica", "Legião Urbana", 530 );
+var musica5 = new Musica("Geração Coca-Cola", "Legião Urbana", 350 );
 var rockNacional = new Playlist { Nome = "Rock Nacional" };
 rockNacional.Add(musica1);
 rockNacional.Add(musica2);
@@ -37,7 +36,7 @@ rockNacional.Add(musica3);
 rockNacional.Add(musica4);
 rockNacional.Add(musica5);
 rockNacional.Add(musica1); // Tentativa de adicionar uma música duplicada, que será ignorada pela implementação do método Add da classe Playlist
-
+rockNacional.Add(new Musica("Tempo Perdido", "Legião Urbana", 455 )); // Tentativa de adicionar uma música com o mesmo título e artista, que será considerada duplicada e ignorada
 
 ExibirPlaylist(rockNacional);
 
@@ -106,15 +105,34 @@ class CompararPorTitulo : IComparer<Musica>
 
 class Musica : IComparable
 {
-    public string Titulo { get; set; } = string.Empty;
-    public string Artista { get; set; } = string.Empty;
-    public int Duracao { get; set; }
+    public string Titulo { get; } = string.Empty;
+    public string Artista { get; } = string.Empty;
+    public int Duracao { get; }
+
+    public Musica(string titulo, string artista, int duracao)
+    {
+        Titulo = titulo;
+        Artista = artista;
+        Duracao = duracao;
+    }
 
     public int CompareTo(object? other) // iguais : 0, menor : -1, maior : 1
     {
         if (other is null) return -1;
         if (other is Musica outraMusica) return this.Duracao.CompareTo(outraMusica.Duracao);
         return -1;
+    }
+
+    public override bool Equals(object? obj) // Sobrescreve o método Equals para comparar músicas com base no título e artista, garantindo que músicas com o mesmo título e artista sejam consideradas iguais, mesmo que sejam instâncias diferentes
+    {
+        if (obj is null) return false;
+        if (obj is Musica outraMusica) return this.Titulo.Equals(outraMusica.Titulo) && this.Artista.Equals(outraMusica.Artista);
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return this.Titulo.GetHashCode() ^ this.Artista.GetHashCode(); // Sobrescreve o método GetHashCode para garantir que o hash code de uma música seja consistente com a implementação de Equals, usando o título e artista para calcular o hash code
     }
 }
 class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir iteração sobre as músicas da playlist
