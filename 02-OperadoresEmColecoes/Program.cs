@@ -141,6 +141,7 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
 
     public void Clear()
     {
+        set.Clear();
         lista.Clear();
     }
 
@@ -190,6 +191,7 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
     }
     public bool Remove(Musica musica)
     {
+        set.Remove(musica); // Remove a música do conjunto para garantir que ela possa ser adicionada novamente no futuro, se desejado
         return lista.Remove(musica);
     }
 
