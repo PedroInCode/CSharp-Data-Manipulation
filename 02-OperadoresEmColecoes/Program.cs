@@ -24,7 +24,7 @@ Funcoes que vamos implementar:
 using System.Collections;
 using System.Reflection.Metadata.Ecma335;
 
-var musica1 = new Musica { Titulo = "Qua Pais É Esse", Artista = "Legião Urbana", Duracao = 350 };
+var musica1 = new Musica { Titulo = "Que Pais É Esse", Artista = "Legião Urbana", Duracao = 350 };
 var musica2 = new Musica { Titulo = "Tempo Perdido", Artista = "Legião Urbana", Duracao = 455 };
 var musica3 = new Musica { Titulo = "Pro dia nascer feliz", Artista = "Barão Vermelho", Duracao = 345 };
 var musica4 = new Musica { Titulo = "Eduardo e Mônica", Artista = "Legião Urbana", Duracao = 530 };
@@ -36,8 +36,8 @@ rockNacional.Add(musica2);
 rockNacional.Add(musica3);
 rockNacional.Add(musica4);
 rockNacional.Add(musica5);
+rockNacional.Add(musica1); // Tentativa de adicionar uma música duplicada, que será ignorada pela implementação do método Add da classe Playlist
 
-rockNacional.OrdenarPorDuracao();
 
 ExibirPlaylist(rockNacional);
 
@@ -119,6 +119,7 @@ class Musica : IComparable
 }
 class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir iteração sobre as músicas da playlist
 {
+    private HashSet<Musica> set = []; // Conjunto para rastrear os títulos das músicas e evitar duplicatas
     private List<Musica> lista = new List<Musica>(); // lista interna para armazenar as músicas da playlist x
     public string Nome { get; set; } = string.Empty;
 
@@ -128,7 +129,14 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
 
     public void Add(Musica musica)
     {
-        lista.Add(musica);
+        if (set.Add(musica)) // Tenta adicionar a música ao conjunto. Se for bem-sucedido, significa que a música não é uma duplicata e pode ser adicionada à lista.
+        {
+            lista.Add(musica);
+        }
+        else
+        {
+            Console.WriteLine($"A música '{musica.Titulo}' já está presente na playlist '{Nome}' e não será adicionada novamente.");
+        }
     }
 
     public void Clear()
