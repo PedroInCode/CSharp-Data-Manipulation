@@ -36,8 +36,52 @@ rockNacional.Add(musica3);
 rockNacional.Add(musica4);
 rockNacional.Add(musica5);
 
-ExibirPlaylist(rockNacional);
+var legiaoUrbana = new Playlist() { Nome = "Mais Populares da Legião Urbana" };
+legiaoUrbana.Add(musica1);
+legiaoUrbana.Add(musica2);
+legiaoUrbana.Add(musica4);
+legiaoUrbana.Add(musica5);
+
+// Console:
+
+ExibirMaisTocadas(rockNacional, legiaoUrbana);
+
 // _______________________________________________________________________________________________________________________________________
+
+void ExibirMaisTocadas(Playlist playlist1, Playlist playlist2)
+{
+    // Musica (Chave/key) - Contagem (Valor/value)
+    Dictionary<Musica, int> ranking = [];
+    foreach (var musica in playlist1)
+    {
+        ranking.Add(musica, 1); // Inicializa a contagem de cada música da primeira playlist com 1
+    }
+
+    foreach (var musica in playlist2)
+    {
+        if (ranking.TryGetValue(musica, out int contagem)) // Verifica se a música da segunda playlist já está presente no ranking
+        {
+            contagem++; // Incrementa a contagem se a música já estiver presente no ranking
+            ranking[musica] = contagem;
+        }
+        else
+        {
+            ranking[musica] = 1; // Adiciona a música ao ranking com contagem 1 se ela não estiver presente
+        }
+    }
+
+    List<KeyValuePair<Musica, int>> top = new(ranking); // Converte o dicionário em uma lista de pares chave-valor para ordenação
+    top.Sort(new PorContagem()); // Ordena a lista de pares chave-valor com base na contagem (valor) em ordem decrescente
+
+    Console.WriteLine($"\nTop 5 Músicas mais incluidas nas playlists");
+    int contador = 1;
+    foreach (var par in top)
+    {
+        Console.WriteLine($"\t - {par.Key.Titulo}");
+        contador++;
+        if (contador > 5) break; // Exibe apenas as 5 músicas mais tocadas
+    }
+}
 
 void ExibirPlaylist(Playlist playlist)
 {
@@ -96,6 +140,14 @@ class CompararPorTitulo : IComparer<Musica>
         if (x is null) return 1;
         if (y is null) return -1;
         return x.Titulo.CompareTo(y.Titulo);
+    }
+}
+
+class PorContagem : IComparer<KeyValuePair<Musica, int>>
+{
+    public int Compare(KeyValuePair<Musica, int> x, KeyValuePair<Musica, int> y)
+    {
+        return y.Value.CompareTo(x.Value); // Multiplica por -1 para ordenar em ordem decrescente com base na contagem (valor)
     }
 }
 
