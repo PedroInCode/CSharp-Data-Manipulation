@@ -15,7 +15,7 @@ Funcoes que vamos implementar:
 // [x] Remover musica da playlist
 // [x] Tocar uma musica aleatoria da playlist
 // [x] Reordenar musicas segundo alguma logica especifica (ex. duracao)
-// [ ] Uma playlist nao pode ter musicas repetidas
+// [x] Uma playlist nao pode ter musicas repetidas
 // [ ] Exibir as 10 musicas mais tocadas em todas as playlists (ranking)
 // [ ] Player de musica com:
 // [ ] - Fila de reproducao (para musicas avulsas e/ou playlists)
@@ -35,12 +35,8 @@ rockNacional.Add(musica2);
 rockNacional.Add(musica3);
 rockNacional.Add(musica4);
 rockNacional.Add(musica5);
-rockNacional.Add(musica1); // Tentativa de adicionar uma música duplicada, que será ignorada pela implementação do método Add da classe Playlist
-rockNacional.Add(new Musica("Tempo Perdido", "Legião Urbana", 455 )); // Tentativa de adicionar uma música com o mesmo título e artista, que será considerada duplicada e ignorada
 
 ExibirPlaylist(rockNacional);
-
-
 // _______________________________________________________________________________________________________________________________________
 
 void ExibirPlaylist(Playlist playlist)
