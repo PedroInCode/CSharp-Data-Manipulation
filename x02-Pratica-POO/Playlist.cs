@@ -83,6 +83,7 @@ internal class Playlist : ICollection<Musica>
         playlist.Sort(new OrdenarPorArtista()); // Utiliza a classe OrdenarPorArtista para ordenar a playlist por artista
     }
 
+
     // -=-=-=-=-=- Métodos do ICollection<Musica> -=-=-=-=-=-
 
     public int Count => playlist.Count;

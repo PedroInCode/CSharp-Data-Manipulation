@@ -16,7 +16,7 @@ Funcoes que vamos implementar:
 // [x] Tocar uma musica aleatoria da playlist
 // [x] Reordenar musicas segundo alguma logica especifica (ex. duracao)
 // [x] Uma playlist nao pode ter musicas repetidas
-// [ ] Exibir as 10 musicas mais tocadas em todas as playlists (ranking)
+// [x] Exibir as 10 musicas mais tocadas em todas as playlists (ranking)
 // [ ] Player de musica com:
 // [ ] - Fila de reproducao (para musicas avulsas e/ou playlists)
 // [ ] - Historico de reproducao */

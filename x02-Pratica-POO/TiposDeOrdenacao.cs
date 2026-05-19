@@ -38,3 +38,11 @@ class OrdenarPorArtista : IComparer<Musica>
         return x.Artista.CompareTo(y.Artista);
     }
 }
+
+class PorContagem : IComparer<KeyValuePair<Musica, int>>
+{
+    public int Compare(KeyValuePair<Musica, int> x, KeyValuePair<Musica, int> y)
+    {
+        return y.Value.CompareTo(x.Value); // Ordenação decrescente
+    }
+}
