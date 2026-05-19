@@ -44,10 +44,20 @@ legiaoUrbana.Add(musica5);
 
 // Console:
 
-ExibirMaisTocadas(rockNacional, legiaoUrbana);
+var player = new PlayerDeMusica();
+player.AdicionarNaFila(musica1);
+player.AdicionarNaFila(rockNacional);
+ExibirFila(player);
 
 // _______________________________________________________________________________________________________________________________________
-
+void ExibirFila(PlayerDeMusica player)
+{
+    Console.WriteLine("\nFila de reprodução:");
+    foreach (var musica in player.Fila())
+    {
+        Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos");
+    }
+}
 void ExibirMaisTocadas(Playlist playlist1, Playlist playlist2)
 {
     // Musica (Chave/key) - Contagem (Valor/value)
@@ -272,3 +282,24 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
         return GetEnumerator();
     }
 }
+class PlayerDeMusica
+{
+    private List<Musica> fila = new List<Musica>(); // Lista para armazenar a fila de reprodução
+    public void AdicionarNaFila(Musica musica)
+    {
+        fila.Add(musica); // Adiciona a música à fila de reprodução
+    }
+
+    public void AdicionarNaFila(Playlist playlist)
+    {
+        foreach (var musica in playlist)
+            AdicionarNaFila(musica); // Adiciona todas as músicas da playlist à fila de reprodução
+    }
+
+    public IEnumerable<Musica> Fila()
+    {
+        foreach (var musica in fila)
+            yield return musica; // Retorna as músicas da fila de reprodução uma a uma
+    }
+}
+    
