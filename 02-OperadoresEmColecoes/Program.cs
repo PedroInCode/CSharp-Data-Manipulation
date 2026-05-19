@@ -45,8 +45,17 @@ legiaoUrbana.Add(musica5);
 // Console:
 
 var player = new PlayerDeMusica();
-player.AdicionarNaFila(musica1);
+player.AdicionarNaFila(musica2);
 player.AdicionarNaFila(rockNacional);
+
+ExibirFila(player);
+
+var proximaMusica = player.ProximaMusicaDaFila();
+if (proximaMusica is not null)
+    Console.WriteLine($"\nTocando a próxima música da fila: {proximaMusica.Titulo}");
+else
+    Console.WriteLine("A fila de reprodução está vazia.");
+
 ExibirFila(player);
 
 // _______________________________________________________________________________________________________________________________________
@@ -284,10 +293,10 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
 }
 class PlayerDeMusica
 {
-    private List<Musica> fila = new List<Musica>(); // Lista para armazenar a fila de reprodução
+    private Queue<Musica> fila = new Queue<Musica>(); // Fila para armazenar as músicas a serem reproduzidas
     public void AdicionarNaFila(Musica musica)
     {
-        fila.Add(musica); // Adiciona a música à fila de reprodução
+        fila.Enqueue(musica); // Adiciona a música à fila de reprodução
     }
 
     public void AdicionarNaFila(Playlist playlist)
@@ -300,6 +309,12 @@ class PlayerDeMusica
     {
         foreach (var musica in fila)
             yield return musica; // Retorna as músicas da fila de reprodução uma a uma
+    }
+
+    public Musica? ProximaMusicaDaFila()
+    {
+        if (fila.Count == 0) return null; // Retorna null se a fila estiver vazia
+        return fila.Dequeue(); // Remove e retorna a próxima música da fila de reprodução
     }
 }
     
