@@ -17,9 +17,9 @@ Funcoes que vamos implementar:
 // [x] Reordenar musicas segundo alguma logica especifica (ex. duracao)
 // [x] Uma playlist nao pode ter musicas repetidas
 // [x] Exibir as 10 musicas mais tocadas em todas as playlists (ranking)
-// [ ] Player de musica com:
-// [ ] - Fila de reproducao (para musicas avulsas e/ou playlists)
-// [ ] - Historico de reproducao */
+// [x] Player de musica com:
+// [x] - Fila de reproducao (para musicas avulsas e/ou playlists)
+// [x] - Historico de reproducao */
 
 using System.Collections;
 using System.Reflection.Metadata.Ecma335;
@@ -49,6 +49,7 @@ player.AdicionarNaFila(musica2);
 player.AdicionarNaFila(rockNacional);
 
 ExibirFila(player);
+ExibirHistorico(player);
 
 var proximaMusica = player.ProximaMusicaDaFila();
 if (proximaMusica is not null)
@@ -57,14 +58,32 @@ else
     Console.WriteLine("A fila de reprodução está vazia.");
 
 ExibirFila(player);
+ExibirHistorico(player);
+
+var musicaAnterior = player.MusicaAnterior();
+if (musicaAnterior is not null)
+    Console.WriteLine($"\nTocando a música anterior: {musicaAnterior.Titulo}");
+else
+    Console.WriteLine("O histórico de reprodução está vazio!");
+
+ExibirFila(player);
+ExibirHistorico(player);
 
 // _______________________________________________________________________________________________________________________________________
 void ExibirFila(PlayerDeMusica player)
-{
-    Console.WriteLine("\nFila de reprodução:");
-    foreach (var musica in player.Fila())
     {
-        Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos");
+        Console.WriteLine("\nFila de reprodução:");
+        foreach (var musica in player.Fila())
+        {
+            Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos");
+        }
+    }
+void ExibirHistorico(PlayerDeMusica player)
+{
+    Console.WriteLine("\nHistórico de reprodução:");
+    foreach (var musica in player.Historico())
+    {
+        Console.WriteLine($"\t - {musica.Titulo}");
     }
 }
 void ExibirMaisTocadas(Playlist playlist1, Playlist playlist2)
@@ -101,7 +120,6 @@ void ExibirMaisTocadas(Playlist playlist1, Playlist playlist2)
         if (contador > 5) break; // Exibe apenas as 5 músicas mais tocadas
     }
 }
-
 void ExibirPlaylist(Playlist playlist)
 {
     Console.WriteLine($"\n Tocando as músicas da playlist: {playlist.Nome}");
@@ -110,7 +128,6 @@ void ExibirPlaylist(Playlist playlist)
         Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos");
     }
 }
-
 void RemoverMusicaPeloTitulo(Playlist playlist, string titulo)
 {
     var musicaEncontrada = playlist.ObterPeloTitulo(titulo);
@@ -126,7 +143,6 @@ void RemoverMusicaPeloTitulo(Playlist playlist, string titulo)
 
     ExibirPlaylist(rockNacional);
 }
-
 void ExibirMusicaAleatoria(Playlist playlist)
 {
     var musicaAleatoria = rockNacional.ObterMusicaAleatoria();
@@ -293,7 +309,8 @@ class Playlist : ICollection<Musica> // Implementando IEnumerable para permitir 
 }
 class PlayerDeMusica
 {
-    private Queue<Musica> fila = new Queue<Musica>(); // Fila para armazenar as músicas a serem reproduzidas
+    private Queue<Musica> fila = new Queue<Musica>(); // primeiro a entrar, primeiro a sair (FIFO) para a fila de reprodução
+    private Stack<Musica> pilha = new Stack<Musica>(); // ultimo a entrar, primeiro a sair (LIFO) para o histórico de reprodução
     public void AdicionarNaFila(Musica musica)
     {
         fila.Enqueue(musica); // Adiciona a música à fila de reprodução
@@ -311,10 +328,24 @@ class PlayerDeMusica
             yield return musica; // Retorna as músicas da fila de reprodução uma a uma
     }
 
+    public Musica? MusicaAnterior()
+    {
+        if (pilha.Count == 0) return null; // Retorna null se o histórico de reprodução estiver vazio
+        return pilha.Pop(); // Remove e retorna a última música reproduzida do histórico de reprodução
+    }
+
     public Musica? ProximaMusicaDaFila()
     {
         if (fila.Count == 0) return null; // Retorna null se a fila estiver vazia
-        return fila.Dequeue(); // Remove e retorna a próxima música da fila de reprodução
+        var musica = fila.Dequeue(); // Remove a próxima música da fila de reprodução
+        pilha.Push(musica); // Adiciona a música ao histórico de reprodução
+        return musica; // Retorna a música que foi removida da fila de reprodução
+    }
+
+    public IEnumerable<Musica> Historico()
+    {
+        foreach (var musica in pilha)
+            yield return musica; // Retorna as músicas do histórico de reprodução uma a uma
     }
 }
     
