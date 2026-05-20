@@ -1,10 +1,15 @@
 ﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var strean = new StreamReader(arquivo);
 
-var musicas = ObterMusicas(strean);
-var musicasDoArtista = ObterMusicasPorArtista(musicas, "Coldplay");
+
+var musicasDoArtista = 
+    ObterMusicas(strean)                  // 1. Obtém as músicas do arquivo CSV
+    .FiltrarPor("Coldplay");              // 2. Filtragem por artista usando o método de extensão
 ExibirMusicas(musicasDoArtista);
 
+// ----------------------------------------------------------------------------------------------------------------- //
+
+// Método que exibe as músicas no console
 void ExibirMusicas(IEnumerable<Musica> musicas)
 {
     var contador = 1;
@@ -18,7 +23,7 @@ void ExibirMusicas(IEnumerable<Musica> musicas)
     }
 }
 
-
+// Método que lê as músicas de um arquivo CSV e retorna um IEnumerable<Musica>
 IEnumerable<Musica> ObterMusicas(StreamReader stream)
 {
     var linha = stream.ReadLine(); // Lê a primeira linha (cabeçalho)
@@ -35,19 +40,22 @@ IEnumerable<Musica> ObterMusicas(StreamReader stream)
         linha = stream.ReadLine(); // Lê a próxima linha
     }
 }
-IEnumerable<Musica> ObterMusicasPorArtista(IEnumerable<Musica> musicas, string artista)
+
+
+// Classes
+static class Extensoes
 {
-    foreach (var musica in musicas)
+    public static IEnumerable<Musica> FiltrarPor(this IEnumerable<Musica> musicas, string artista)
     {
-        if (musica.Artista.Equals(artista, StringComparison.OrdinalIgnoreCase))
+        foreach (var musica in musicas)
         {
-            yield return musica; // Retorna a música do artista especificado
+            if (musica.Artista.Equals(artista, StringComparison.OrdinalIgnoreCase))
+            {
+                yield return musica; // Retorna a música que atende ao critério
+            }
         }
     }
 }
-
-
-
 class Musica
 {
     public string Titulo { get; set; }
