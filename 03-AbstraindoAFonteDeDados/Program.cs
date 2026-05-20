@@ -2,7 +2,8 @@
 using var strean = new StreamReader(arquivo);
 
 var musicas = ObterMusicas(strean);
-ExibirMusicas(musicas);
+var musicasDoArtista = ObterMusicasPorArtista(musicas, "Coldplay");
+ExibirMusicas(musicasDoArtista);
 
 void ExibirMusicas(IEnumerable<Musica> musicas)
 {
@@ -10,12 +11,13 @@ void ExibirMusicas(IEnumerable<Musica> musicas)
     Console.WriteLine("\nExbindo as Músicas:");
     foreach (var musica in musicas)
     {
-        Console.WriteLine($"\t - {musica.Titulo}");
+        Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos");
         contador ++;
         if (contador > 10) break; // Limita a exibição a 10 músicas
 
     }
 }
+
 
 IEnumerable<Musica> ObterMusicas(StreamReader stream)
 {
@@ -33,6 +35,17 @@ IEnumerable<Musica> ObterMusicas(StreamReader stream)
         linha = stream.ReadLine(); // Lê a próxima linha
     }
 }
+IEnumerable<Musica> ObterMusicasPorArtista(IEnumerable<Musica> musicas, string artista)
+{
+    foreach (var musica in musicas)
+    {
+        if (musica.Artista.Equals(artista, StringComparison.OrdinalIgnoreCase))
+        {
+            yield return musica; // Retorna a música do artista especificado
+        }
+    }
+}
+
 
 
 class Musica
