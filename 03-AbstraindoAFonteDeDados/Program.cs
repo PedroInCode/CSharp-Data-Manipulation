@@ -3,9 +3,9 @@ using var strean = new StreamReader(arquivo);
 
 
 var musicasDoArtista =
-    ObterMusicas(strean)                  // 1. Obtém as músicas do arquivo CSV
-    .FiltrarPorArtista("Coldplay")        // 2. Filtragem por artista usando o método de extensão
-    .FiltrarPorDuracao(400);              // 3. Filtragem por duracao usando o metodo de extensão
+    ObterMusicas(strean)                             // 1. Obtém as músicas do arquivo CSV
+    .FiltrarPor(FiltrarMusicasMetallica)            // 2. Filtragem por artista usando o método de extensão
+    .FiltrarPor(FiltrarMaisLongaQue);              // 3. Filtragem por duracao usando o metodo de extensão
 ExibirMusicas(musicasDoArtista);
 
 // ----------------------------------------------------------------------------------------------------------------- //
@@ -42,27 +42,23 @@ IEnumerable<Musica> ObterMusicas(StreamReader stream)
     }
 }
 
+bool FiltrarPorArtista(Musica musica) => musica.Artista == "Coldplay";
+bool FiltrarMaisLongaQue(Musica m) => m.Duracao >= 400;
+bool FiltrarMusicasMetallica(Musica musica) => musica.Artista == "Metallica";
+bool FiltrarPorTituloQueComecaComA(Musica music) => music.Titulo.StartsWith("A");
+
+Func<Musica, bool> condicao; // Delegate = tipos que representam metodos com a mesma assinatura.
 
 // Classes
 static class Extensoes // classe precisa ser estática para conter métodos de extensão
 {
     // Método precisa ser estático e o primeiro parâmetro deve usar a palavra-chave "this" para indicar que é um método de extensão
-    public static IEnumerable<Musica> FiltrarPorArtista(this IEnumerable<Musica> musicas, string artista)
+  
+    public static IEnumerable<Musica> FiltrarPor(this IEnumerable<Musica> musicas, Func<Musica, bool> condicao)
     {
         foreach (var musica in musicas)
         {
-            if (musica.Artista.Equals(artista, StringComparison.OrdinalIgnoreCase))
-            {
-                yield return musica; // Retorna a música que atende ao critério
-            }
-        }
-    }
-
-    public static IEnumerable<Musica> FiltrarPorDuracao(this IEnumerable<Musica> musicas, int duracao)
-    {
-        foreach (var musica in musicas)
-        {
-            if (musica.Duracao >= duracao)
+            if (condicao(musica))
             {
                 yield return musica; // Retorna a música que atende ao critério
             }
