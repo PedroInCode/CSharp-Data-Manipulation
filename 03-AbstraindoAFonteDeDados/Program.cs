@@ -4,8 +4,8 @@ using var strean = new StreamReader(arquivo);
 
 var musicasDoArtista =
     ObterMusicas(strean)                             // 1. Obtém as músicas do arquivo CSV
-    .FiltrarPor(FiltrarMusicasMetallica)            // 2. Filtragem por artista usando o método de extensão
-    .FiltrarPor(FiltrarMaisLongaQue);              // 3. Filtragem por duracao usando o metodo de extensão
+    .FiltrarPor( musica => musica.Artista == "Metallica")            // 2. Filtragem por artista usando o método de extensão
+    .FiltrarPor(musica => musica.Duracao >= 400);              // 3. Filtragem por duracao usando o metodo de extensão
 ExibirMusicas(musicasDoArtista);
 
 // ----------------------------------------------------------------------------------------------------------------- //
@@ -41,11 +41,6 @@ IEnumerable<Musica> ObterMusicas(StreamReader stream)
         linha = stream.ReadLine(); // Lê a próxima linha
     }
 }
-
-bool FiltrarPorArtista(Musica musica) => musica.Artista == "Coldplay";
-bool FiltrarMaisLongaQue(Musica m) => m.Duracao >= 400;
-bool FiltrarMusicasMetallica(Musica musica) => musica.Artista == "Metallica";
-bool FiltrarPorTituloQueComecaComA(Musica music) => music.Titulo.StartsWith("A");
 
 Func<Musica, bool> condicao; // Delegate = tipos que representam metodos com a mesma assinatura.
 
