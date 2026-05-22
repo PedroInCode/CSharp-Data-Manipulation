@@ -7,6 +7,7 @@ var leitor = new LeitorArquivo();
 var Exibidor = new ConsoleTools();
 
 var musicas = leitor.ObterMusicas(reader);
-var apenasColdplay = musicas.FiltrarPor(musicas => musicas.Artista == "Coldplay");
+var apenasColdplay = musicas.FiltrarPor(musicas => musicas.Artista.Equals("COLDPLAY", StringComparison.OrdinalIgnoreCase))
+    .FiltrarPor(musicas => musicas.Duracao >= 400);
 Exibidor.ExibirMusicas(apenasColdplay);
 
