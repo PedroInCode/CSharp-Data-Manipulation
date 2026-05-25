@@ -4,8 +4,8 @@ using var strean = new StreamReader(arquivo);
 
 var musicasDoArtista =
     ObterMusicas(strean)                             // 1. Obtém as músicas do arquivo CSV
-    .Where(musica => musica.Artista == "Metallica")            // 2. Filtragem por artista usando o método de extensão
-    .Where(musica => musica.Duracao >= 400);              // 3. Filtragem por duracao usando o metodo de extensão
+    .Where(musica => musica.Artista == "Coldplay")            // 2. Filtragem por artista usando o método de extensão
+    .OrderBy(musica => musica.Duracao);            // 3. Filtragem por duracao usando o metodo de extensão
 ExibirMusicas(musicasDoArtista);
 
 // ----------------------------------------------------------------------------------------------------------------- //
