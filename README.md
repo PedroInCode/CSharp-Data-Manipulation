@@ -26,7 +26,7 @@ Além dos exercícios das aulas, este repositório contém implementações pró
 ---
 
 ## 🛠️ Tecnologias
-- .NET 8 / C#
+- .NET 9 / C#
 - Visual Studio 2022
 - Git/GitHub
 
