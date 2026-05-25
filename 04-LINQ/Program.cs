@@ -3,9 +3,12 @@ using var strean = new StreamReader(arquivo);
 
 
 var musicasDoArtista =
-    ObterMusicas(strean)                             // 1. Obtém as músicas do arquivo CSV
-    .Where(musica => musica.Artista == "Coldplay")            // 2. Filtragem por artista usando o método de extensão
-    .OrderBy(musica => musica.Duracao);            // 3. Filtragem por duracao usando o metodo de extensão
+    ObterMusicas(strean)                                        // 1. Obtém as músicas do arquivo CSV
+    .Where(musica => musica.Artista == "Coldplay")             // 2. Filtragem por artista usando o método de extensão
+    .OrderBy(musica => musica.Titulo)                         // 3. Ordenação por título usando o método de extensão
+    //.ThenBy(musica => musica.Duracao)                      // 4. Ordenação secundária por duração usando o método de extensão
+    //.Take(5);                                             // 5. Limita a exibição a 5 músicas usando o método de extensão
+    .Skip(5);                                              // 6. Pula as primeiras 5 músicas usando o método de extensão
 ExibirMusicas(musicasDoArtista);
 
 // ----------------------------------------------------------------------------------------------------------------- //
