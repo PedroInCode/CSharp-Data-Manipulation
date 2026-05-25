@@ -1,19 +1,32 @@
 ﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var strean = new StreamReader(arquivo);
 
+var artistas = ObterMusicas(strean)
+    .Select(musica => musica.Artista)      // 1. Seleciona o nome do artista usando Select do LINQ
+    .Distinct()                           // 2. Remove os artistas duplicados usando Distinct do LINQ
+    .OrderBy(artista => artista);        // 3. Ordena os artistas em ordem alfabética usando OrderBy do LINQ
 
-var musicasDoArtista =
-    ObterMusicas(strean)                                        // 1. Obtém as músicas do arquivo CSV
-    .Where(musica => musica.Artista == "Coldplay")             // 2. Filtragem por artista usando o método de extensão
-    .OrderBy(musica => musica.Titulo)                         // 3. Ordenação por título usando o método de extensão
-    //.ThenBy(musica => musica.Duracao)                      // 4. Ordenação secundária por duração usando o método de extensão
-    //.Take(5);                                             // 5. Limita a exibição a 5 músicas usando o método de extensão
-    .Skip(5);                                              // 6. Pula as primeiras 5 músicas usando o método de extensão
-ExibirMusicas(musicasDoArtista);
+foreach (var artista in artistas)
+{
+       Console.WriteLine(artista);
+}
 
-// ----------------------------------------------------------------------------------------------------------------- //
 
 // Método que exibe as músicas no console
+
+void OperacoesDeFiltroEOrdenacao(StreamReader stream)
+{
+    var musicasDoColdplay =
+        ObterMusicas(strean)                                        // 1. Obtém as músicas do arquivo CSV
+        .Where(musica => musica.Artista == "Coldplay")             // 2. Filtra as músicas do artista "Coldplay" usando Where do LINQ
+        .OrderBy(musica => musica.Titulo)                         // 3. Ordena as músicas por título usando OrderBy do LINQ
+        //.ThenBy(musica => musica.Duracao)                      // 4. Ordena as músicas por duração usando ThenBy do LINQ (opcional)
+        .Skip(5 * 2)                                            // 5. Pula as primeras 10 músicas usando o método Skip do LINQ 
+        .Take(5);                                              // 6. Pega as próximas 5 músicas usando o método Take do LINQ
+
+    ExibirMusicas(musicasDoColdplay);
+}
+
 void ExibirMusicas(IEnumerable<Musica> musicas)
 {
     var contador = 1;
