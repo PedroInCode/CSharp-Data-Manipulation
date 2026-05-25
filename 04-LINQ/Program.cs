@@ -2,18 +2,29 @@
 using var strean = new StreamReader(arquivo);
 
 var artistas = ObterMusicas(strean)
-    .Select(musica => musica.Artista)      // 1. Seleciona o nome do artista usando Select do LINQ
-    .Distinct()                           // 2. Remove os artistas duplicados usando Distinct do LINQ
-    .OrderBy(artista => artista);        // 3. Ordena os artistas em ordem alfabética usando OrderBy do LINQ
+    .SelectMany(musica => musica.Generos)      // 1. Seleciona os gêneros de todas as músicas usando SelectMany do LINQ
+    .Distinct()                               // 2. Remove os Generos duplicados usando Distinct do LINQ
+    .OrderBy(genero => genero);              // 3. Ordena os Generos em ordem alfabética usando OrderBy do LINQ
 
-foreach (var artista in artistas)
+foreach (var genero in artistas)
 {
-       Console.WriteLine(artista);
+    Console.WriteLine(genero);
 }
 
 
 // Método que exibe as músicas no console
+void OperacoesDeProjecao(StreamReader stream)
+{
+    var artistas = ObterMusicas(strean)
+    .Select(musica => musica.Artista)      // 1. Seleciona o nome do artista usando Select do LINQ
+    .Distinct()                           // 2. Remove os artistas duplicados usando Distinct do LINQ
+    .OrderBy(artista => artista);        // 3. Ordena os artistas em ordem alfabética usando OrderBy do LINQ
 
+    foreach (var artista in artistas)
+    {
+        Console.WriteLine(artista);
+    }
+}
 void OperacoesDeFiltroEOrdenacao(StreamReader stream)
 {
     var musicasDoColdplay =
@@ -26,7 +37,6 @@ void OperacoesDeFiltroEOrdenacao(StreamReader stream)
 
     ExibirMusicas(musicasDoColdplay);
 }
-
 void ExibirMusicas(IEnumerable<Musica> musicas)
 {
     var contador = 1;
@@ -43,28 +53,29 @@ void ExibirMusicas(IEnumerable<Musica> musicas)
 // Método que lê as músicas de um arquivo CSV e retorna um IEnumerable<Musica>
 IEnumerable<Musica> ObterMusicas(StreamReader stream)
 {
-    var linha = stream.ReadLine(); // Lê a primeira linha (cabeçalho)
-    while (linha is not null) // Continua lendo até o final do arquivo
+    var linha = stream.ReadLine();                               // Lê a primeira linha (cabeçalho)
+    while (linha is not null)                                   // Continua lendo até o final do arquivo
     {
-        var partes = linha.Split(';'); // Divide a linha em partes usando o ponto e vírgula como separador
+        var partes = linha.Split(';');                        // Divide a linha em partes usando o ponto e vírgula como separador
         var musica = new Musica
         {
             Titulo = partes[0],
             Artista = partes[1],
-            Duracao = Convert.ToInt32(partes[2])
+            Duracao = Convert.ToInt32(partes[2]),
+            Generos = partes[3].Split(",").Select(g => g.Trim())   // Divide os gêneros em partes usando a vírgula como separador e remove os espaços em branco usando Trim
         };
-        yield return musica; // Retorna a música atual e pausa a execução
-        linha = stream.ReadLine(); // Lê a próxima linha
+        yield return musica;                          // Retorna a música atual e pausa a execução
+        linha = stream.ReadLine();                   // Lê a próxima linha
     }
 }
 
 
 // Classes
-
 class Musica
 {
     public string Titulo { get; set; }
     public string Artista { get; set; }
     public int Duracao { get; set; } // Duração em segundos
+    public IEnumerable<string> Generos { get; set; }
 
 }
