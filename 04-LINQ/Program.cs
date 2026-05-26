@@ -1,18 +1,22 @@
 ﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var strean = new StreamReader(arquivo);
 
-var artistas = ObterMusicas(strean)
+
+
+
+// Método que exibe as músicas no console
+void OperacoesDeProjecao2(StreamReader stream)
+{
+    var generos = ObterMusicas(strean)
     .SelectMany(musica => musica.Generos)      // 1. Seleciona os gêneros de todas as músicas usando SelectMany do LINQ
     .Distinct()                               // 2. Remove os Generos duplicados usando Distinct do LINQ
     .OrderBy(genero => genero);              // 3. Ordena os Generos em ordem alfabética usando OrderBy do LINQ
 
-foreach (var genero in artistas)
-{
-    Console.WriteLine(genero);
+    foreach (var genero in generos)
+    {
+        Console.WriteLine(genero);
+    }
 }
-
-
-// Método que exibe as músicas no console
 void OperacoesDeProjecao(StreamReader stream)
 {
     var artistas = ObterMusicas(strean)
