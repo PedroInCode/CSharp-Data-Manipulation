@@ -1,12 +1,12 @@
 ﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
-using var strean = new StreamReader(arquivo);
+using var stream = new StreamReader(arquivo);
 
-EstatisticasDeMusicas(strean);
+EstatisticasDeMusicas(stream);
 
 
 void EstatisticasDeMusicas(StreamReader stream)
 {
-    var musicas = ObterMusicas(strean).ToList(); // Converte o IEnumerable<Musica> para List<Musica> para evitar múltiplas iterações sobre o arquivo
+    var musicas = ObterMusicas(stream).ToList(); // Converte o IEnumerable<Musica> para List<Musica> para evitar múltiplas iterações sobre o arquivo
 
     Console.WriteLine($"\nExistem {musicas.Count()} músicas na coleção.");
     Console.WriteLine($"\nExistem {musicas.Count(m => m.Duracao > 600)} músicas com mais do que 10 minutos na coleção.");
@@ -17,7 +17,7 @@ void EstatisticasDeMusicas(StreamReader stream)
 }
 void OperacoesDeProjecao2(StreamReader stream)
 { 
-    var generos = ObterMusicas(strean)
+    var generos = ObterMusicas(stream)
     .SelectMany(musica => musica.Generos)      // 1. Seleciona os gêneros de todas as músicas usando SelectMany do LINQ
     .Distinct()                               // 2. Remove os Generos duplicados usando Distinct do LINQ
     .OrderBy(genero => genero);              // 3. Ordena os Generos em ordem alfabética usando OrderBy do LINQ
@@ -29,7 +29,7 @@ void OperacoesDeProjecao2(StreamReader stream)
 }
 void OperacoesDeProjecao(StreamReader stream)
 {
-    var artistas = ObterMusicas(strean)
+    var artistas = ObterMusicas(stream)
     .Select(musica => musica.Artista)      // 1. Seleciona o nome do artista usando Select do LINQ
     .Distinct()                           // 2. Remove os artistas duplicados usando Distinct do LINQ
     .OrderBy(artista => artista);        // 3. Ordena os artistas em ordem alfabética usando OrderBy do LINQ
@@ -42,7 +42,7 @@ void OperacoesDeProjecao(StreamReader stream)
 void OperacoesDeFiltroEOrdenacao(StreamReader stream)
 {
     var musicasDoColdplay =
-        ObterMusicas(strean)                                        // 1. Obtém as músicas do arquivo CSV
+        ObterMusicas(stream)                                        // 1. Obtém as músicas do arquivo CSV
         .Where(musica => musica.Artista == "Coldplay")             // 2. Filtra as músicas do artista "Coldplay" usando Where do LINQ
         .OrderBy(musica => musica.Titulo)                         // 3. Ordena as músicas por título usando OrderBy do LINQ
         //.ThenBy(musica => musica.Duracao)                      // 4. Ordena as músicas por duração usando ThenBy do LINQ (opcional)
