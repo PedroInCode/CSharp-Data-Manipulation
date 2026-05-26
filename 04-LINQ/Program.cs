@@ -1,12 +1,22 @@
 ﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var strean = new StreamReader(arquivo);
 
+EstatisticasDeMusicas(strean);
 
 
-
-// Método que exibe as músicas no console
-void OperacoesDeProjecao2(StreamReader stream)
+void EstatisticasDeMusicas(StreamReader stream)
 {
+    var musicas = ObterMusicas(strean).ToList(); // Converte o IEnumerable<Musica> para List<Musica> para evitar múltiplas iterações sobre o arquivo
+
+    Console.WriteLine($"\nExistem {musicas.Count()} músicas na coleção.");
+    Console.WriteLine($"\nExistem {musicas.Count(m => m.Duracao > 600)} músicas com mais do que 10 minutos na coleção.");
+    Console.WriteLine($"\nA música com menor duração da coleção leva {musicas.Min(m => m.Duracao)} segundos.");
+    Console.WriteLine($"\nA música com maior duração da coleção leva {musicas.Max(m => m.Duracao)} segundos.");
+    Console.WriteLine($"\nA duração média das músicas da coleção é {musicas.Average(m => m.Duracao):F2} segundos.");
+    Console.WriteLine($"\nVocê vai levar {musicas.Sum(m => m.Duracao)/(3600*24)} dias para ouvir toda a coleção!"); 
+}
+void OperacoesDeProjecao2(StreamReader stream)
+{ 
     var generos = ObterMusicas(strean)
     .SelectMany(musica => musica.Generos)      // 1. Seleciona os gêneros de todas as músicas usando SelectMany do LINQ
     .Distinct()                               // 2. Remove os Generos duplicados usando Distinct do LINQ
