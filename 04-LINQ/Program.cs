@@ -1,7 +1,18 @@
 ﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
 
-EstatisticasDeMusicas(stream);
+var artistas = ObterMusicas(stream)
+    .GroupBy(m => m.Artista);
+
+Console.WriteLine("Artistas e suas músicas:");
+foreach (var artista in artistas.Take(5))
+{
+    Console.WriteLine($"\nArtista: {artista.Key} com {artista.Count()} músicas no total");
+    foreach (var musica in artista)
+    {
+        Console.WriteLine($"\t - {musica.Titulo} ({musica.Duracao} segundos)");
+    }
+}
 
 
 void EstatisticasDeMusicas(StreamReader stream)
@@ -65,6 +76,7 @@ void ExibirMusicas(IEnumerable<Musica> musicas)
 }
 
 // Método que lê as músicas de um arquivo CSV e retorna um IEnumerable<Musica>
+
 IEnumerable<Musica> ObterMusicas(StreamReader stream)
 {
     var linha = stream.ReadLine();                               // Lê a primeira linha (cabeçalho)
@@ -82,8 +94,6 @@ IEnumerable<Musica> ObterMusicas(StreamReader stream)
         linha = stream.ReadLine();                   // Lê a próxima linha
     }
 }
-
-
 // Classes
 class Musica
 {
