@@ -2,17 +2,25 @@
 using var stream = new StreamReader(arquivo);
 
 
-OperacaoDeObtencaoDeElementos(stream);
+var artistaComMaiorQuantidadeDeMusicas = ObterMusicas(stream)
+    .GroupBy(m => m.Artista)
+    .Select(g => new { Artista = g.Key, Musicas = g, Total = g.Count() })
+    .MaxBy(a => a.Total);
+
+if (artistaComMaiorQuantidadeDeMusicas is not null)
+{
+    Console.WriteLine($"O artista com maior quantidade de músicas é {artistaComMaiorQuantidadeDeMusicas.Artista} com {artistaComMaiorQuantidadeDeMusicas.Total} músicas.");
+}
 
 void OperacaoDeObtencaoDeElementos(StreamReader stream)
 {
-    var musicas = ObterMusicas(stream);
+    var musicas = ObterMusicas(stream).ToList(); // Converte o IEnumerable<Musica> para List<Musica> para evitar múltiplas iterações sobre o arquivo
 
     var primeiraMusica = musicas.First(); // Obtém a primeira música da coleção usando o método First do LINQ
     Console.WriteLine($"A primeira música da coleção é '{primeiraMusica.Titulo}' do artista {primeiraMusica.Artista}.");
 
     var maiorDuracao = musicas.MaxBy(m => m.Duracao); // Obtém a duração máxima das músicas usando o método Max do LINQ
-    Console.WriteLine($"A música com mair duração é {maiorDuracao.Titulo}");
+    Console.WriteLine($"A música com mair duração é {maiorDuracao.Titulo} -> {maiorDuracao.Duracao} segundos.");
 }
 void OperacoesDeAgrupamento(StreamReader stream)
 {
