@@ -1,20 +1,34 @@
 ﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
 
-var artistas = ObterMusicas(stream)
+
+OperacaoDeObtencaoDeElementos(stream);
+
+void OperacaoDeObtencaoDeElementos(StreamReader stream)
+{
+    var musicas = ObterMusicas(stream);
+
+    var primeiraMusica = musicas.First(); // Obtém a primeira música da coleção usando o método First do LINQ
+    Console.WriteLine($"A primeira música da coleção é '{primeiraMusica.Titulo}' do artista {primeiraMusica.Artista}.");
+
+    var maiorDuracao = musicas.MaxBy(m => m.Duracao); // Obtém a duração máxima das músicas usando o método Max do LINQ
+    Console.WriteLine($"A música com mair duração é {maiorDuracao.Titulo}");
+}
+void OperacoesDeAgrupamento(StreamReader stream)
+{
+    var artistas = ObterMusicas(stream)
     .GroupBy(m => m.Artista);
 
-Console.WriteLine("Artistas e suas músicas:");
-foreach (var artista in artistas.Take(5))
-{
-    Console.WriteLine($"\nArtista: {artista.Key} com {artista.Count()} músicas no total");
-    foreach (var musica in artista)
+    Console.WriteLine("Artistas e suas músicas:");
+    foreach (var artista in artistas.Take(5))
     {
-        Console.WriteLine($"\t - {musica.Titulo} ({musica.Duracao} segundos)");
+        Console.WriteLine($"\nArtista: {artista.Key} com {artista.Count()} músicas no total");
+        foreach (var musica in artista)
+        {
+            Console.WriteLine($"\t - {musica.Titulo} ({musica.Duracao} segundos)");
+        }
     }
 }
-
-
 void EstatisticasDeMusicas(StreamReader stream)
 {
     var musicas = ObterMusicas(stream).ToList(); // Converte o IEnumerable<Musica> para List<Musica> para evitar múltiplas iterações sobre o arquivo
