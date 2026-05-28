@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace x04_Pratica_POO;
 
-internal class LeitorDeArquivo
+class LeitorDeArquivo
 {
-    IEnumerable<Musica> ObterMusicas(StreamReader stream)
+    public IEnumerable<Musica> ObterMusicas(StreamReader stream)
     {
         var linha = stream.ReadLine();                               // Lê a primeira linha (cabeçalho)
         while (linha is not null)                                   // Continua lendo até o final do arquivo

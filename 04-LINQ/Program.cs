@@ -2,16 +2,20 @@
 using var stream = new StreamReader(arquivo);
 
 
-var artistaComMaiorQuantidadeDeMusicas = ObterMusicas(stream)
+
+
+void ArtistasComMaiorQuantidade(StreamReader stream)
+{
+    var artistaComMaiorQuantidadeDeMusicas = ObterMusicas(stream)
     .GroupBy(m => m.Artista)
     .Select(g => new { Artista = g.Key, Musicas = g, Total = g.Count() })
     .MaxBy(a => a.Total);
 
-if (artistaComMaiorQuantidadeDeMusicas is not null)
-{
-    Console.WriteLine($"O artista com maior quantidade de músicas é {artistaComMaiorQuantidadeDeMusicas.Artista} com {artistaComMaiorQuantidadeDeMusicas.Total} músicas.");
+    if (artistaComMaiorQuantidadeDeMusicas is not null)
+    {
+        Console.WriteLine($"O artista com maior quantidade de músicas é {artistaComMaiorQuantidadeDeMusicas.Artista} com {artistaComMaiorQuantidadeDeMusicas.Total} músicas.");
+    }
 }
-
 void OperacaoDeObtencaoDeElementos(StreamReader stream)
 {
     var musicas = ObterMusicas(stream).ToList(); // Converte o IEnumerable<Musica> para List<Musica> para evitar múltiplas iterações sobre o arquivo
