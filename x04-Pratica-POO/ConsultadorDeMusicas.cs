@@ -97,4 +97,17 @@ class ConsultadorDeMusicas
             if (contador > 10) break;
         }
     }
+
+    public void artistaComMaiorQuantidade(StreamReader stream)
+    {
+        var artistaComMaiorQuantidadeDeMusicas = _musicas
+            .GroupBy(m => m.Artista)
+            .Select(g => new { Artista = g.Key, Musicas = g, Total = g.Count()})
+            .MaxBy(a => a.Total);
+
+        if (artistaComMaiorQuantidadeDeMusicas != null)
+        {
+            Console.WriteLine($"O artista com maior quantidade de músicas é {artistaComMaiorQuantidadeDeMusicas.Artista} com {artistaComMaiorQuantidadeDeMusicas.Total} músicas.");
+        }
+    }
 }
