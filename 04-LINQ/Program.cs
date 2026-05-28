@@ -1,9 +1,31 @@
 ﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
 
+OperacoesDeVerificacaoDeExistencia(stream);
 
+void OperacoesDeVerificacaoDeExistencia(StreamReader stream)
+{
+    var musicas = ObterMusicas(stream).ToList(); // Converte o IEnumerable<Musica> para List<Musica> para evitar múltiplas iterações sobre o arquivo
+    var artistas = musicas
+        .GroupBy(m => m.Artista)                   // Agrupa as músicas por artista usando GroupBy do LINQ
+        .Where(g => g.Any(m => m.Duracao > 470)); // Filtra os grupos de artistas que possuem pelo menos uma música com duração maior do que 470 segundos usando Where e Any do LINQ
 
+    Console.WriteLine("Artistas que possuem pelo menos uma música com duração maior do que 470 segundos:");
+    foreach (var artista in artistas)
+    {
+        Console.WriteLine($"\t - {artista.Key}");
+    }
 
+    var reggae = musicas
+        .GroupBy(m => m.Artista)
+        .Where(g => g.Any(m => m.Generos.Contains("Reggae")));
+
+    Console.WriteLine("\nArtistas que possuem pelo menos uma música do gênero Reggae:");
+    foreach (var artista in reggae)
+    {
+        Console.WriteLine($"\t - {artista.Key}");
+    }
+}
 void ArtistasComMaiorQuantidade(StreamReader stream)
 {
     var artistaComMaiorQuantidadeDeMusicas = ObterMusicas(stream)
