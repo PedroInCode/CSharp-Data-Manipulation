@@ -1,19 +1,19 @@
 ﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
 
-var musicas = ObterMusicas(stream); // Obtém as músicas do arquivo CSV
+var musicas = ObterMusicas(stream) // Obtém as músicas do arquivo CSV
+    .Where(m => m.Titulo.StartsWith("The")) // Filtra músicas cujo título começa com "The"
+    .Take(50); // Limita a exibição às primeiras 50 músicas
 ExibirMusicas(musicas); // Exibe as músicas no console
 
 void ExibirMusicas(IEnumerable<Musica> musicas)
 {
-    var contador = 1;
-    Console.WriteLine("\nExbindo as Músicas:");
+    var titulo = "Músicas Disponíveis";
+
+    Console.WriteLine(titulo);
     foreach (var musica in musicas)
     {
         Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos - Lançamento: {musica.DataLancamento.ToShortDateString()}");
-        contador++;
-        if (contador > 20) break; // Limita a exibição a 10 músicas
-
     }
 }
 
@@ -31,7 +31,7 @@ IEnumerable<Musica> ObterMusicas(StreamReader stream)
         Artista = partes[1],
         Duracao = Convert.ToInt32(partes[2]),
         Generos = partes[3].Split(",").Select(g => g.Trim()),   
-        DataLancamento = DateTime.Parse(partes[4])
+        DataLancamento = Convert.ToDateTime(partes[4])
         };
             yield return musica;                          // Retorna a música atual e pausa a execução
             linha = stream.ReadLine();                   // Lê a próxima linha
