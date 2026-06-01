@@ -1,12 +1,17 @@
 ﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
 
-//var musicas = ObterMusicas(stream) // Obtém as músicas do arquivo CSV
-//    .Where(m => m.Titulo.StartsWith("T")) // Filtra músicas cujo título começa com "The"
-//    .Take(50); // Limita a exibição às primeiras 50 músicas
-//ExibirMusicas(musicas); // Exibe as músicas no console
+var musica = ObterMusicas(stream)          // Obtém as músicas do arquivo CSV
+    .Where(m => m.Titulo.StartsWith("T"))  // Filtra músicas cujo título começa com "The"
+    .FirstOrDefault();                    // Retorna a primeira música encontrada ou null se nenhuma for encontrada
 
-
+if (musica is not null)
+{
+    Console.WriteLine($"Titulo da Música: {musica.Titulo}");
+    Console.WriteLine();
+    musica.Titulo =musica.Titulo.Replace("The ", ""); // Exemplo de uso do método Replace para substituir parte do título da música
+    Console.WriteLine($"Titulo da Música: {musica.Titulo}");
+}
 
 void ValidarSenha()
 {
