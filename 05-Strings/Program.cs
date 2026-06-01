@@ -6,41 +6,43 @@ using var stream = new StreamReader(arquivo);
 //    .Take(50); // Limita a exibição às primeiras 50 músicas
 //ExibirMusicas(musicas); // Exibe as músicas no console
 
-// Exemplo de uso de LINQ para contar caracteres em uma senha
 
-//var titulo = "Músicas Disponíveis";
-//foreach (var letra in titulo) Console.WriteLine(letra);
 
-var senha = "Santos.1912";
-
-var totalCaracteres = senha.Length;                             // Conta o número total de caracteres na senha
-var totalLetrasMaiusculas = senha.Count(c => char.IsUpper(c));  // Conta o número de caracteres maiúsculos na senha
-var totalLetrasMinusculas = senha.Count(c => char.IsLower(c));  // Conta o número de caracteres minúsculos na senha
-var totalNumeros = senha.Count(c => char.IsDigit(c));           // Conta o número de caracteres numéricos na senha
-var totalSimbolos = senha.Count(c => !char.IsLetterOrDigit(c)); // Conta o número de caracteres que não são letras ou dígitos (símbolos)
-
-Console.WriteLine("Verificando a força da senha...");
-if (totalCaracteres >= 8 && totalLetrasMaiusculas > 0 && totalLetrasMinusculas > 0 && totalNumeros > 0 && totalSimbolos > 0)
+void ValidarSenha()
 {
-    Console.WriteLine("Senha forte");
-}
-else
-{
-    Console.WriteLine("Senha fraca");
-}
+    //var titulo = "Músicas Disponíveis";
+    //foreach (var letra in titulo) Console.WriteLine(letra);
+
+    var senha = "Santos.1912";
+
+    var totalCaracteres = senha.Length;                             // Conta o número total de caracteres na senha
+    var totalLetrasMaiusculas = senha.Count(c => char.IsUpper(c));  // Conta o número de caracteres maiúsculos na senha
+    var totalLetrasMinusculas = senha.Count(c => char.IsLower(c));  // Conta o número de caracteres minúsculos na senha
+    var totalNumeros = senha.Count(c => char.IsDigit(c));           // Conta o número de caracteres numéricos na senha
+    var totalSimbolos = senha.Count(c => !char.IsLetterOrDigit(c)); // Conta o número de caracteres que não são letras ou dígitos (símbolos)
+
+    Console.WriteLine("Verificando a força da senha...");
+    if (totalCaracteres >= 8 && totalLetrasMaiusculas > 0 && totalLetrasMinusculas > 0 && totalNumeros > 0 && totalSimbolos > 0)
+    {
+        Console.WriteLine("Senha forte");
+    }
+    else
+    {
+        Console.WriteLine("Senha fraca");
+    }
 
     void ExibirMusicas(IEnumerable<Musica> musicas)
-{
-    var titulo = "Músicas Disponíveis";
-
-    Console.WriteLine(titulo);
-    foreach (var musica in musicas)
     {
-        Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos - Lançamento: {musica.DataLancamento.ToShortDateString()}");
+        var titulo = "Músicas Disponíveis";
+
+        Console.WriteLine(titulo);
+        foreach (var musica in musicas)
+        {
+            Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos - Lançamento: {musica.DataLancamento.ToShortDateString()}");
+        }
     }
 }
 
-// Método que lê as músicas de um arquivo CSV e retorna um IEnumerable<Musica>
 IEnumerable<Musica> ObterMusicas(StreamReader stream)
 {
     var linha = stream.ReadLine();                               // Lê a primeira linha (cabeçalho)
@@ -60,7 +62,6 @@ IEnumerable<Musica> ObterMusicas(StreamReader stream)
     }
 }
 
-// Classes
 class Musica
 {
     public string Titulo { get; set; }
