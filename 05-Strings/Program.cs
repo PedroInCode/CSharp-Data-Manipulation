@@ -77,18 +77,19 @@ void ExibirMusicasEmTabela(IEnumerable<Musica> musicas)
     var titulo = "Músicas do arquivo:";
     Console.WriteLine(titulo);
 
-    var colunaTitulo = "Título".PadRight(40);
-    var colunaArtista = "Artista".PadRight(30);
-    var colunaDuracao = "Duração".PadRight(10);
-    var colunaLancamento = "Lançamento".PadRight(15);
-    Console.WriteLine($"{colunaTitulo}{colunaArtista}{colunaDuracao}{colunaLancamento}");
+    var colunaTitulo = "Título".PadRight(40);             // Define a largura da coluna para o título (40 caracteres)
+    var colunaArtista = "Artista".PadRight(30);          // Define a largura da coluna para o artista (30 caracteres)
+    var colunaDuracao = "Duração".PadRight(10);         // Define a largura da coluna para a duração (10 caracteres)
+    var colunaLancamento = "Lançamento".PadRight(15);  // Define a largura da coluna para a data de lançamento (15 caracteres)
+    Console.WriteLine($"{colunaTitulo}{colunaArtista}{colunaDuracao}{colunaLancamento}"); 
 
     var borda = "".PadRight(120, '-');
     Console.WriteLine(borda);
 
     foreach (var musica in musicas)
     {
-        var linha = $"{musica.Titulo, -40}{musica.Artista, -30}{musica.Duracao, -10}{musica.DataLancamento.ToShortDateString(), -15}";
+        var duracao = string.Format("{0, -10:F3}", musica.Duracao/60.0); // Formata a duração em minutos com 3 casas decimais e alinha à esquerda em um campo de 10 caracteres
+        var linha = $"{musica.Titulo, -40}{musica.Artista, -30}{duracao}{musica.DataLancamento, -15:dd/MM/yyyy}";
         Console.WriteLine(linha);
     }
 }
