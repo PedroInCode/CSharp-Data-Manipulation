@@ -59,7 +59,7 @@ IEnumerable<Musica> ObterMusicas(StreamReader stream)
         Titulo = partes[0],
         Artista = partes[1],
         Duracao = Convert.ToInt32(partes[2]),
-        Generos = partes[3].Split(",").Select(g => g.Trim()),   
+        Generos = partes[3].Split(",", StringSplitOptions.TrimEntries),   
         DataLancamento = Convert.ToDateTime(partes[4])
         };
             yield return musica;                          // Retorna a música atual e pausa a execução
