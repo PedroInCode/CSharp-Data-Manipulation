@@ -1,10 +1,12 @@
-﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
+﻿using System.Data.Common;
+
+using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
 
 var musicas = ObterMusicas(stream)
     .Take(20);
 
-ExibirMusicas(musicas);
+ExibirMusicasEmTabela(musicas);
 
 
 
@@ -60,12 +62,33 @@ void ValidarSenha()
 
 void ExibirMusicas(IEnumerable<Musica> musicas)
 {
-    var titulo = "Músicas do arquivo:";
+    var titulo = "Músicas do arquivo:"; 
 
-    Console.WriteLine(titulo);
+    Console.WriteLine(titulo); 
     foreach (var musica in musicas)
     {
         var linha = $"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao}s [{musica.DataLancamento.ToShortDateString()}]";
+        Console.WriteLine(linha);
+    }
+}
+
+void ExibirMusicasEmTabela(IEnumerable<Musica> musicas)
+{
+    var titulo = "Músicas do arquivo:";
+    Console.WriteLine(titulo);
+
+    var colunaTitulo = "Título".PadRight(40);
+    var colunaArtista = "Artista".PadRight(30);
+    var colunaDuracao = "Duração".PadRight(10);
+    var colunaLancamento = "Lançamento".PadRight(15);
+    Console.WriteLine($"{colunaTitulo}{colunaArtista}{colunaDuracao}{colunaLancamento}");
+
+    var borda = "".PadRight(120, '-');
+    Console.WriteLine(borda);
+
+    foreach (var musica in musicas)
+    {
+        var linha = $"{musica.Titulo, -40}{musica.Artista, -30}{musica.Duracao, -10}{musica.DataLancamento.ToShortDateString(), -15}";
         Console.WriteLine(linha);
     }
 }
