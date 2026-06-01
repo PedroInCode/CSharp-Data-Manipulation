@@ -1,6 +1,13 @@
 ﻿using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
 
+var musicas = ObterMusicas(stream)
+    .Take(20);
+
+ExibirMusicas(musicas);
+
+
+
 void AlterandoOTitulo(StreamReader stream)
 {
     var musica = ObterMusicas(stream)          // Obtém as músicas do arquivo CSV
@@ -48,6 +55,15 @@ void ValidarSenha()
         {
             Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos - Lançamento: {musica.DataLancamento.ToShortDateString()}");
         }
+    }
+}
+
+void ExibirMusicas(IEnumerable<Musica> musicas)
+{
+    Console.WriteLine("\nExbindo as Músicas:");
+    foreach (var musica in musicas)
+    {
+        Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos");
     }
 }
 
