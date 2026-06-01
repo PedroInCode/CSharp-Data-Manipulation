@@ -60,10 +60,13 @@ void ValidarSenha()
 
 void ExibirMusicas(IEnumerable<Musica> musicas)
 {
-    Console.WriteLine("\nExbindo as Músicas:");
+    var titulo = "Músicas do arquivo:";
+
+    Console.WriteLine(titulo);
     foreach (var musica in musicas)
     {
-        Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos");
+        var linha = $"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao}s [{musica.DataLancamento.ToShortDateString()}]";
+        Console.WriteLine(linha);
     }
 }
 
