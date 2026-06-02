@@ -4,14 +4,29 @@ using System.Runtime.CompilerServices;
 using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
 
-var musicas = ObterMusicas(stream)
-    .Where(m => m.Artista.Equals("Coldplay", StringComparison.OrdinalIgnoreCase)) // Filtra as músicas do artista "Coldplay", ignorando diferenças de maiúsculas e minúsculas
-    .Take(20);
-ExibirMusicasEmTabela(musicas);
+void ExecutarLaboratorioStringPool()
+{
+    #region 1. Conceito de Interning 
+    var artista1 = "Coldplay";
+    var artista2 = "Coldplay";
+    var artista3 = new string("Coldplay"); // Nova instância, pula a piscina
+
+    // Apontam para o mesmo lugar na piscina
+    Console.WriteLine($"artista1 e artista2 usam mesma memória? {ReferenceEquals(artista1, artista2)}"); // True
+    #endregion
+
+    #region 2. O Caso do ToUpper e string.Intern()
+    var artista4 = "COLDPLAY"; // Vai para a piscina por ser literal
+    var artista5 = artista1.ToUpper(); // Cria nova string na Heap, NÃO vai para a piscina
+    var artista6 = string.Intern(artista1.ToUpper()); // Procura na piscina, acha o de artista4 e reaproveita!
+
+    Console.WriteLine($"artista4 e artista5 usam mesma memória? {ReferenceEquals(artista4, artista5)}"); // False
+    Console.WriteLine($"artista4 e artista6 usam mesma memória? {ReferenceEquals(artista4, artista6)}"); // True (Mágica do string.Intern)
+    #endregion
+}
 
 
-// metodo para filtrar musicas independente de letras maiusculas ou minusculas e exibir o titulo da musica
-void ExibirMusicasDoArtista(StreamReader stream, string artista)
+void ComparandoStrings(StreamReader stream, string artista)
 {
     var musicas = ObterMusicas(stream)
         .Where(m => m.Artista.Equals(artista, StringComparison.OrdinalIgnoreCase)); // Filtra as músicas do artista especificado, ignorando diferenças de maiúsculas e minúsculas
