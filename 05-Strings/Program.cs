@@ -1,15 +1,34 @@
 ﻿using System.Data.Common;
+using System.Runtime.CompilerServices;
 
 using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
 
 var musicas = ObterMusicas(stream)
+    .Where(m => m.Artista.Equals("Coldplay", StringComparison.OrdinalIgnoreCase)) // Filtra as músicas do artista "Coldplay", ignorando diferenças de maiúsculas e minúsculas
     .Take(20);
-
 ExibirMusicasEmTabela(musicas);
 
 
+// metodo para filtrar musicas independente de letras maiusculas ou minusculas e exibir o titulo da musica
+void ExibirMusicasDoArtista(StreamReader stream, string artista)
+{
+    var musicas = ObterMusicas(stream)
+        .Where(m => m.Artista.Equals(artista, StringComparison.OrdinalIgnoreCase)); // Filtra as músicas do artista especificado, ignorando diferenças de maiúsculas e minúsculas
+    Console.WriteLine($"Músicas do artista: {artista}");
+    foreach (var musica in musicas)
+    {
+        Console.WriteLine($"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao} segundos - Lançamento: {musica.DataLancamento.ToShortDateString()}");
+    }
 
+    /* métodos que utilizam StringComparison
+    "Coldplay".Equals("coldplay", StringComparison.OrdinalIgnoreCase);
+    "Coldplay".StartsWith("cold", StringComparison.OrdinalIgnoreCase);
+    "Coldplay".EndsWith("coldplay", StringComparison.OrdinalIgnoreCase);
+    "Coldplay".IndexOf("coldplay", StringComparison.OrdinalIgnoreCase);
+    "Coldplay".Contains("OLD", StringComparison.OrdinalIgnoreCase);
+    "Coldplay".Replace("cold", "warm", StringComparison.OrdinalIgnoreCase); */
+}
 void AlterandoOTitulo(StreamReader stream)
 {
     var musica = ObterMusicas(stream)          // Obtém as músicas do arquivo CSV
@@ -24,7 +43,6 @@ void AlterandoOTitulo(StreamReader stream)
         Console.WriteLine($"Titulo da Música: {musica.Titulo}");
     }
 }
-
 void ValidarSenha()
 {
     //var titulo = "Músicas Disponíveis";
@@ -59,7 +77,6 @@ void ValidarSenha()
         }
     }
 }
-
 void ExibirMusicas(IEnumerable<Musica> musicas)
 {
     var titulo = "Músicas do arquivo:"; 
@@ -71,7 +88,6 @@ void ExibirMusicas(IEnumerable<Musica> musicas)
         Console.WriteLine(linha);
     }
 }
-
 void ExibirMusicasEmTabela(IEnumerable<Musica> musicas)
 {
     var titulo = "Músicas do arquivo:";
@@ -93,7 +109,6 @@ void ExibirMusicasEmTabela(IEnumerable<Musica> musicas)
         Console.WriteLine(linha);
     }
 }
-
 IEnumerable<Musica> ObterMusicas(StreamReader stream)
 {
     var linha = stream.ReadLine();                               // Lê a primeira linha (cabeçalho)
@@ -121,4 +136,8 @@ class Musica
     public IEnumerable<string> Generos { get; set; }
     public DateTime DataLancamento { get; set; }
 
+    public override string ToString()
+    {
+        return $"{this.Titulo} ({this.Artista}) - {this.Duracao}s [{this.DataLancamento}]";
+    }
 }
