@@ -30,4 +30,4 @@ Além dos exercícios das aulas, este repositório contém implementações pró
 - Visual Studio 2022
 - Git/GitHub
 
-Desenvolvido por **PedroInCode** 🚀
+Desenvolvido por **Pedro Gustavo** 🚀
