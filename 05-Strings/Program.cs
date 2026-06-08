@@ -4,6 +4,13 @@ using System.Runtime.CompilerServices;
 using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
 
+var musicas = ObterMusicas(stream)
+    .Take(20);
+
+ExibirMusicasEmTabela(musicas);
+
+
+
 void ExecutarLaboratorioStringPool()
 {
     #region 1. Conceito de Interning 
@@ -24,8 +31,6 @@ void ExecutarLaboratorioStringPool()
     Console.WriteLine($"artista4 e artista6 usam mesma memória? {ReferenceEquals(artista4, artista6)}"); // True (Mágica do string.Intern)
     #endregion
 }
-
-
 void ComparandoStrings(StreamReader stream, string artista)
 {
     var musicas = ObterMusicas(stream)
@@ -126,16 +131,17 @@ void ExibirMusicasEmTabela(IEnumerable<Musica> musicas)
 }
 IEnumerable<Musica> ObterMusicas(StreamReader stream)
 {
-    var linha = stream.ReadLine();                               // Lê a primeira linha (cabeçalho)
-    while (linha is not null)                                   // Continua lendo até o final do arquivo
+    var linha = stream.ReadLine();                                 // Lê a primeira linha (cabeçalho)
+
+    while (linha is not null)                                    
     {
-        var partes = linha.Split(';');                        // Divide a linha em partes usando o ponto e vírgula como separador
+        var partes = linha.Split(';');                         // Divide a linha em partes usando o ponto e vírgula como separador
         var musica = new Musica
         {
         Titulo = partes[0],
         Artista = partes[1],
-        Duracao = Convert.ToInt32(partes[2]),
-        Generos = partes[3].Split(",", StringSplitOptions.TrimEntries),   
+        Duracao = int.TryParse(partes[2], out int duracao) ? duracao : 350, // Tenta converter a duração para inteiro, se falhar, atribui 0
+            Generos = partes[3].Split(",", StringSplitOptions.TrimEntries),   
         DataLancamento = Convert.ToDateTime(partes[4])
         };
             yield return musica;                          // Retorna a música atual e pausa a execução
