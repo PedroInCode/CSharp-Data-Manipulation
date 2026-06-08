@@ -136,16 +136,19 @@ IEnumerable<Musica> ObterMusicas(StreamReader stream)
     while (linha is not null)                                    
     {
         var partes = linha.Split(';');                         // Divide a linha em partes usando o ponto e vírgula como separador
-        var musica = new Musica
+        if (partes.Length == 5)
         {
-        Titulo = partes[0],
-        Artista = partes[1],
-        Duracao = int.TryParse(partes[2], out int duracao) ? duracao : 350, //se falhar, atribui 350 segundos como valor padrão
-        Generos = partes[3].Split(",", StringSplitOptions.TrimEntries),   
-        DataLancamento = DateTime.TryParse(partes[4], out DateTime data) ? data : DateTime.Today
-        };
+            var musica = new Musica
+            {
+            Titulo = string.IsNullOrWhiteSpace(partes[0]) ? "Título Desconecido" : partes[0], // Se o título estiver vazio ou for apenas espaços, atribui "Título Desconecido"
+                Artista = string.IsNullOrWhiteSpace(partes[1]) ? "Artista Desconhecido" : partes[1], // Se o artista estiver vazio ou for apenas espaços, atribui "Artista Desconhecido"
+            Duracao = int.TryParse(partes[2], out int duracao) ? duracao : 350, //se falhar, atribui 350 segundos como valor padrão
+            Generos = partes[3].Split(",", StringSplitOptions.TrimEntries),   
+            DataLancamento = DateTime.TryParse(partes[4], out DateTime data) ? data : DateTime.Today
+            };
             yield return musica;                          // Retorna a música atual e pausa a execução
-            linha = stream.ReadLine();                   // Lê a próxima linha
+        }
+        linha = stream.ReadLine();                   // Lê a próxima linha
     }
 }
 
