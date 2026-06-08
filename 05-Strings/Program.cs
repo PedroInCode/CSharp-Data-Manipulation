@@ -140,9 +140,9 @@ IEnumerable<Musica> ObterMusicas(StreamReader stream)
         {
         Titulo = partes[0],
         Artista = partes[1],
-        Duracao = int.TryParse(partes[2], out int duracao) ? duracao : 350, // Tenta converter a duração para inteiro, se falhar, atribui 0
-            Generos = partes[3].Split(",", StringSplitOptions.TrimEntries),   
-        DataLancamento = Convert.ToDateTime(partes[4])
+        Duracao = int.TryParse(partes[2], out int duracao) ? duracao : 350, //se falhar, atribui 350 segundos como valor padrão
+        Generos = partes[3].Split(",", StringSplitOptions.TrimEntries),   
+        DataLancamento = DateTime.TryParse(partes[4], out DateTime data) ? data : DateTime.Today
         };
             yield return musica;                          // Retorna a música atual e pausa a execução
             linha = stream.ReadLine();                   // Lê a próxima linha
