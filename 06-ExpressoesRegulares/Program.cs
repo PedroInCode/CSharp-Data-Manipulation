@@ -4,45 +4,11 @@ using System.Text.RegularExpressions;
 
 using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
-
-#region Estudo de Regex: Grupos de Captura (Capture Groups)
-
-// O padrão @"(\d):(\d\d)" usa parênteses para isolar partes do texto:
-// (Primeiro parênteses) -> match.Groups[1] (Minutos)
-// (Segundo parênteses)  -> match.Groups[2] (Segundos)
-
-var linhaExemplo = "The Broken Road;Rolling Stones;6:39;Rock, Blues Rock;13/09/1974";
-var matchExemplo = Regex.Match(linhaExemplo, @"(\d):(\d\d)");
-
-if (matchExemplo.Success)
-{
-    // matchExemplo.Groups[0] -> Retorna o texto completo que deu o match: "6:39"
-    Console.WriteLine($"Match Completo (Groups[0]): {matchExemplo.Groups[0].Value}");
-
-    // matchExemplo.Groups[1] -> Isola o que caiu no primeiro parênteses: "6"
-    var minutos = int.Parse(matchExemplo.Groups[1].Value);
-    Console.WriteLine($"Grupo 1 - Minutos (Groups[1]): {minutos}");
-
-    // matchExemplo.Groups[2] -> Isola o que caiu no segundo parênteses: "39"
-    var segundos = int.Parse(matchExemplo.Groups[2].Value);
-    Console.WriteLine($"Grupo 2 - Segundos (Groups[2]): {segundos}");
-
-    // Conversão matemática direta sem precisar de Split(':') ou manipulações manuais de string
-    var duracaoTotalSegundos = (minutos * 60) + segundos;
-    Console.WriteLine($"Duração Total convertida: {duracaoTotalSegundos} segundos");
-}
-else
-{
-    Console.WriteLine("Padrão de duração não encontrado.");
-}
-
-#endregion
-
-/*
+  
 var musicas = ObterMusicas(stream)
-    .Take(20);
+    .Take(30);
 ExibirMusicasEmTabela(musicas);
-*/
+    
 
 void ExibirMusicas(IEnumerable<Musica> musicas)
     {
@@ -82,20 +48,30 @@ IEnumerable<Musica> ObterMusicas(StreamReader stream)
 
     while (linha is not null)
     {
-        var partes = linha.Split(';');                         // Divide a linha em partes usando o ponto e vírgula como separador
+        var partes = linha.Split(';');                         
+
+        int duracao = 350;
+        var match = Regex.Match(linha, @"(\d?\d):(\d\d)");
+        if (match.Success)
+        {
+            var minutos = int.Parse(match.Groups[1].Value);
+            var segundos = int.Parse(match.Groups[2].Value);
+            duracao = (minutos * 60) + segundos;
+        }
+
         if (partes.Length == 5)
         {
             var musica = new Musica
             {
-                Titulo = string.IsNullOrWhiteSpace(partes[0]) ? "Título Desconecido" : partes[0], // Se o título estiver vazio ou for apenas espaços, atribui "Título Desconecido"
-                Artista = string.IsNullOrWhiteSpace(partes[1]) ? "Artista Desconhecido" : partes[1], // Se o artista estiver vazio ou for apenas espaços, atribui "Artista Desconhecido"
-                Duracao = int.TryParse(partes[2], out int duracao) ? duracao : 350, //se falhar, atribui 350 segundos como valor padrão
+                Titulo = string.IsNullOrWhiteSpace(partes[0]) ? "Título Desconecido" : partes[0], 
+                Artista = string.IsNullOrWhiteSpace(partes[1]) ? "Artista Desconhecido" : partes[1], 
+                Duracao = duracao,                                 
                 Generos = partes[3].Split(",", StringSplitOptions.TrimEntries),
                 DataLancamento = DateTime.TryParse(partes[4], out DateTime data) ? data : DateTime.Today
             };
-            yield return musica;                          // Retorna a música atual e pausa a execução
+            yield return musica;                          
         }
-        linha = stream.ReadLine();                   // Lê a próxima linha
+        linha = stream.ReadLine();                 
     }
 }
 class Musica
