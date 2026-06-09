@@ -6,20 +6,25 @@ using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read
 using var stream = new StreamReader(arquivo);
 
 var linha = "The Broken Road;Rolling Stones;6:39;Rock, Blues Rock;13/09/1974";
-var match = Regex.Match(linha, @"\d:\d\d"); // Regex.Match para encontrar o padrão de duração no formato "m:ss" (minutos e segundos)
-if (match.Success)                         // Verifica se a correspondência foi encontrada
-    Console.WriteLine($"Duração encontrada: {match.Value}");
+var match = Regex.Match(linha, @"(\d):(\d\d)"); 
+if (match.Success)
+{
+    var minutos = int.Parse(match.Groups[1].Value);
+    var segundos = int.Parse(match.Groups[2].Value);
+    Console.WriteLine($"Duração encontrada: {(minutos * 60) + segundos}");
+}
 else
-    Console.WriteLine("Duração não encontrada na linha.");
+{
+    Console.WriteLine("Duração não encontrada.");
+}
 
+    /*
+    var musicas = ObterMusicas(stream)
+        .Take(20);
+    ExibirMusicasEmTabela(musicas);
+    */
 
-/*
-var musicas = ObterMusicas(stream)
-    .Take(20);
-ExibirMusicasEmTabela(musicas);
-*/
-
-void ExibirMusicas(IEnumerable<Musica> musicas)
+    void ExibirMusicas(IEnumerable<Musica> musicas)
     {
         var titulo = "Músicas do arquivo:";
 
