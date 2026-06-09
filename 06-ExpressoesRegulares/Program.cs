@@ -1,26 +1,35 @@
 ﻿using System.Data.Common;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
 
+var linha = "The Broken Road;Rolling Stones;6:39;Rock, Blues Rock;13/09/1974";
+var match = Regex.Match(linha, @"\d:\d\d"); // Regex.Match para encontrar o padrão de duração no formato "m:ss" (minutos e segundos)
+if (match.Success)                         // Verifica se a correspondência foi encontrada
+    Console.WriteLine($"Duração encontrada: {match.Value}");
+else
+    Console.WriteLine("Duração não encontrada na linha.");
+
+
+/*
 var musicas = ObterMusicas(stream)
     .Take(20);
-
 ExibirMusicasEmTabela(musicas);
-
+*/
 
 void ExibirMusicas(IEnumerable<Musica> musicas)
-{
-    var titulo = "Músicas do arquivo:";
-
-    Console.WriteLine(titulo);
-    foreach (var musica in musicas)
     {
-        var linha = $"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao}s [{musica.DataLancamento.ToShortDateString()}]";
-        Console.WriteLine(linha);
+        var titulo = "Músicas do arquivo:";
+
+        Console.WriteLine(titulo);
+        foreach (var musica in musicas)
+        {
+            var linha = $"\t - {musica.Titulo} ({musica.Artista}) - {musica.Duracao}s [{musica.DataLancamento.ToShortDateString()}]";
+            Console.WriteLine(linha);
+        }
     }
-}
 void ExibirMusicasEmTabela(IEnumerable<Musica> musicas)
 {
     var titulo = "Músicas do arquivo:";
