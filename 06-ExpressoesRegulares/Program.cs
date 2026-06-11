@@ -9,24 +9,62 @@ using var stream = new StreamReader(arquivo);
 //    .Take(30);
 //ExibirMusicasEmTabela(musicas);
 
-artistaComCaracteresEspeciais();
 
-    
-void artistaComCaracteresEspeciais()
+/// <summary>
+/// Filtra, isola e exibe em ordem alfabética todos os títulos de músicas
+/// que possuem EXATAMENTE duas palavras no nome.
+/// </summary>
+void TitulosComDuasPalavras()
 {
-    var regex = new Regex(@"[^a-zA-Z0-9 ]");
+    // Regex de correspondência exata para duas palavras:
+    // ^   -> Garante que o padrão começa no início do título
+    // \w+ -> Primeira palavra (um ou mais caracteres alfanuméricos)
+    //     -> Um espaço em branco obrigatório entre elas
+    // \w+ -> Segunda palavra (um ou mais caracteres alfanuméricos)
+    // $   -> Garante que o título termina exatamente ali (bloqueia 3 ou mais palavras)
+    var regex = new Regex(@"^\w+ \w+$");
 
-    var artista = ObterMusicas(stream)
-        .Where(m => regex.IsMatch(m.Artista))
-        .Select(m => m.Artista)
-        .Distinct()
-        .OrderBy(a => a);
+    // Processamento dos dados com LINQ expressions
+    var titulosFiltrados = ObterMusicas(stream)
+        .Where(m => regex.IsMatch(m.Titulo)) // 1. Mantém apenas títulos com exatamente duas palavras (Regex = true)
+        .Select(m => m.Titulo)               // 2. Extrai apenas o título da música (converte de Musica para string)
+        .Distinct()                          // 3. Remove os títulos duplicados
+        .OrderBy(t => t);                    // 4. Ordena o resultado de A a Z
 
-    foreach (var artist in artista)
+    // Exibe os resultados tratados no console
+    Console.WriteLine("--- Títulos com exatamente duas palavras encontrados ---");
+    foreach (var titulo in titulosFiltrados)
     {
-        Console.WriteLine(artist);
+        Console.WriteLine($"- {titulo}");
     }
 }
+
+/// <summary>
+/// Filtra, isola e exibe em ordem alfabética todos os artistas 
+/// que possuem caracteres especiais ou acentuação no nome.
+/// </summary>
+void ArtistaComCaracteresEspeciais()
+{
+    // Regex de Negação: O '[^ ]' indica que a Regex dará MATCH em tudo o que NÃO for:
+    // a-z (letras minúsculas), A-Z (letras maiúsculas), 0-9 (números) ou espaço em branco.
+    // Qualquer acento (á, ç, é) ou símbolo (@, !) ativará esta Regex.
+    var regex = new Regex(@"[^a-zA-Z0-9 ]");
+
+    // Processamento dos dados usando LINQ expressions
+    var artistasFiltrados = ObterMusicas(stream)
+        .Where(m => regex.IsMatch(m.Artista)) // 1. Mantém apenas músicas com artistas "inválidos" (Regex = true)
+        .Select(m => m.Artista)               // 2. Extrai apenas o nome do artista (converte de Musica para string)
+        .Distinct()                           // 3. Remove os nomes duplicados da lista
+        .OrderBy(a => a);                     // 4. Ordena o resultado final de A a Z
+
+    // Exibe os resultados tratados no console
+    Console.WriteLine("--- Artistas com caracteres especiais encontrados ---");
+    foreach (var artista in artistasFiltrados)
+    {
+        Console.WriteLine($"- {artista}");
+    }
+}
+
 void ExibirMusicas(IEnumerable<Musica> musicas)
     {
         var titulo = "Músicas do arquivo:";
