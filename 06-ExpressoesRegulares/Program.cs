@@ -10,26 +10,48 @@ using var stream = new StreamReader(arquivo);
 //ExibirMusicasEmTabela(musicas);
 
 /// <summary>
-/// Filtra e exibe músicas que possuem títulos com três ou mais 
-/// letras idênticas coladas/consecutivas (ex: "Gooool" ou "Uhuuu").
+/// Filtra e exibe as primeiras 20 músicas cujo título 
+/// contém números romanos isolados (ex: "IV", "II", "X").
+/// </summary>
+void TituloComNumerosRomanos()
+{
+    // Regex para Números Romanos Isolados:
+    // \b          -> Fronteira de palavra (garante que o número não seja parte de outra palavra)
+    // [IVXLCDM]+ -> Aceita um ou mais dos caracteres que compõem os números romanos
+    // \b          -> Fronteira de palavra final
+    var regex = new Regex(@"\b[IVXLCDM]+\b");
+
+    // Processamento dos dados com LINQ expressões
+    var titulosFiltrados = ObterMusicas(stream)
+        .Where(m => regex.IsMatch(m.Titulo)) // Filtra títulos que possuem números romanos válidos
+        .Take(20);                           // Limita o resultado a 20 registros por performance
+
+    // Renderiza o resultado na tela usando a estrutura de tabela do projeto
+    Console.WriteLine("--- Títulos com Números Romanos encontrados ---");
+    ExibirMusicasEmTabela(titulosFiltrados);
+}
+
+/// <summary>
+/// Filtra e exibe músicas que possuem títulos com duas ou mais 
+/// letras idênticas coladas/consecutivas (ex: "Gool" ou "Uhuu").
 /// </summary>
 void TitulosComLetrasConsecutivas()
 {
     // Regex de Caracteres Consecutivos:
-    // \w* -> Aceita letras/números opcionais antes do padrão
+    // \w*   -> Aceita letras/números opcionais antes do padrão
     // (\w)  -> Grupo 1: Captura a letra base que será testada
-    // \1    -> Faz referência à letra do Grupo 1...
-    // {2,}  -> ...e exige que ela se repita 2 ou MAIS vezes seguidas (Totalizando 3+ letras iguais)
+    // \1+   -> Backreference: Exige que a letra capturada no Grupo 1 se repita pelo menos 1 vez (Totalizando 2 letras iguais)
+    // caso queira mais: {2,}  -> ...e exige que ela se repita 2 ou MAIS vezes seguidas (Totalizando 2+ letras iguais)
     // \w    -> Garante mais um caractere alfanumérico na sequência
-    var regex = new Regex(@"\w*(\w)\1{2,}\w");
+    var regex = new Regex(@"\w*(\w)\1+\w");
 
     // Processamento dos dados com LINQ expressões
     var titulosFiltrados = ObterMusicas(stream)
-        .Where(m => regex.IsMatch(m.Titulo)) // Filtra os títulos com 3+ letras coladas
+        .Where(m => regex.IsMatch(m.Titulo)) // Filtra os títulos com 2+ letras coladas
         .Take(20);                           // Limita a 20 registros por performance
 
     // Renderiza o resultado na tela usando a estrutura de tabela do projeto
-    Console.WriteLine("--- Títulos com 3 ou mais letras consecutivas encontrados ---");
+    Console.WriteLine("--- Títulos com 2 ou mais letras consecutivas encontrados ---");
     ExibirMusicasEmTabela(titulosFiltrados);
 }
 
