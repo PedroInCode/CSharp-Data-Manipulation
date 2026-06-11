@@ -9,6 +9,29 @@ using var stream = new StreamReader(arquivo);
 //    .Take(30);
 //ExibirMusicasEmTabela(musicas);
 
+/// <summary>
+/// Filtra e exibe as primeiras 20 músicas cujo título 
+/// começa e termina exatamente com a mesma palavra.
+/// </summary>
+void TitulosComEco()
+{
+    // Regex com Backreference (\1):
+    // ^      -> Início da string
+    // (\w+)  -> Grupo 1: Captura a primeira palavra
+    // .* -> Aceita qualquer texto (ou nenhum) no meio do título
+    // \1     -> Exige EXATAMENTE o mesmo conteúdo capturado no Grupo 1
+    // $      -> Fim da string
+    var regex = new Regex(@"^(\w+).*\1$");
+
+    // Processamento dos dados com LINQ expressões
+    var titulosFiltrados = ObterMusicas(stream)
+        .Where(m => regex.IsMatch(m.Titulo)) // Filtra títulos com "eco" (Regex = true)
+        .Take(20);                           // Limpa a performance pegando apenas os primeiros 20
+
+    // Renderiza o resultado na tela usando a estrutura de tabela do projeto
+    Console.WriteLine("--- Títulos que começam e terminam com a mesma palavra ---");
+    ExibirMusicasEmTabela(titulosFiltrados);
+}
 
 /// <summary>
 /// Filtra, isola e exibe em ordem alfabética todos os títulos de músicas
