@@ -4,12 +4,29 @@ using System.Text.RegularExpressions;
 
 using var arquivo = new FileStream("musicas.csv", FileMode.Open, FileAccess.Read);
 using var stream = new StreamReader(arquivo);
-  
-var musicas = ObterMusicas(stream)
-    .Take(30);
-ExibirMusicasEmTabela(musicas);
-    
 
+//var musicas = ObterMusicas(stream)
+//    .Take(30);
+//ExibirMusicasEmTabela(musicas);
+
+artistaComCaracteresEspeciais();
+
+    
+void artistaComCaracteresEspeciais()
+{
+    var regex = new Regex(@"[^a-zA-Z0-9 ]");
+
+    var artista = ObterMusicas(stream)
+        .Where(m => regex.IsMatch(m.Artista))
+        .Select(m => m.Artista)
+        .Distinct()
+        .OrderBy(a => a);
+
+    foreach (var artist in artista)
+    {
+        Console.WriteLine(artist);
+    }
+}
 void ExibirMusicas(IEnumerable<Musica> musicas)
     {
         var titulo = "Músicas do arquivo:";
