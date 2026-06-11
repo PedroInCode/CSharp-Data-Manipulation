@@ -10,6 +10,30 @@ using var stream = new StreamReader(arquivo);
 //ExibirMusicasEmTabela(musicas);
 
 /// <summary>
+/// Filtra e exibe músicas que possuem títulos com três ou mais 
+/// letras idênticas coladas/consecutivas (ex: "Gooool" ou "Uhuuu").
+/// </summary>
+void TitulosComLetrasConsecutivas()
+{
+    // Regex de Caracteres Consecutivos:
+    // \w* -> Aceita letras/números opcionais antes do padrão
+    // (\w)  -> Grupo 1: Captura a letra base que será testada
+    // \1    -> Faz referência à letra do Grupo 1...
+    // {2,}  -> ...e exige que ela se repita 2 ou MAIS vezes seguidas (Totalizando 3+ letras iguais)
+    // \w    -> Garante mais um caractere alfanumérico na sequência
+    var regex = new Regex(@"\w*(\w)\1{2,}\w");
+
+    // Processamento dos dados com LINQ expressões
+    var titulosFiltrados = ObterMusicas(stream)
+        .Where(m => regex.IsMatch(m.Titulo)) // Filtra os títulos com 3+ letras coladas
+        .Take(20);                           // Limita a 20 registros por performance
+
+    // Renderiza o resultado na tela usando a estrutura de tabela do projeto
+    Console.WriteLine("--- Títulos com 3 ou mais letras consecutivas encontrados ---");
+    ExibirMusicasEmTabela(titulosFiltrados);
+}
+
+/// <summary>
 /// Filtra e exibe as primeiras 20 músicas cujo título 
 /// começa e termina exatamente com a mesma palavra.
 /// </summary>
